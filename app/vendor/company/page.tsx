@@ -4,7 +4,13 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -19,14 +25,10 @@ export default function CompanyPage() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const companyId = searchParams.get("id");
-  
-  const { 
-    getCompanyById, 
-    getCompaniesByUserId,
-    addCompany,
-    updateCompany 
-  } = useMovieStore();
-  
+
+  const { getCompanyById, getCompaniesByUserId, addCompany, updateCompany } =
+    useMovieStore();
+
   const [isClient, setIsClient] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [seats, setSeats] = useState([
@@ -51,12 +53,12 @@ export default function CompanyPage() {
 
   // Redirect if not vendor
   useEffect(() => {
-    if (isClient && (!user || user.type !== 'vendor')) {
-      router.push('/login');
+    if (isClient && (!user || user.type !== "vendor")) {
+      router.push("/login");
     }
   }, [user, router, isClient]);
 
-  if (!isClient || !user || user.type !== 'vendor') {
+  if (!isClient || !user || user.type !== "vendor") {
     return null;
   }
 
@@ -68,11 +70,15 @@ export default function CompanyPage() {
     setSeats(seats.filter((_, i) => i !== index));
   };
 
-  const handleSeatChange = (index: number, field: 'name' | 'capacity', value: string) => {
+  const handleSeatChange = (
+    index: number,
+    field: "name" | "capacity",
+    value: string
+  ) => {
     const newSeats = [...seats];
     newSeats[index] = {
       ...newSeats[index],
-      [field]: field === 'capacity' ? parseInt(value) || 0 : value,
+      [field]: field === "capacity" ? parseInt(value) || 0 : value,
     };
     setSeats(newSeats);
   };
@@ -87,7 +93,7 @@ export default function CompanyPage() {
       return;
     }
 
-    if (seats.some(seat => !seat.name.trim() || seat.capacity <= 0)) {
+    if (seats.some((seat) => !seat.name.trim() || seat.capacity <= 0)) {
       toast({
         title: "Error",
         description: "Please fill in all seat types with valid capacities",
@@ -117,7 +123,7 @@ export default function CompanyPage() {
           description: "Theater added successfully",
         });
       }
-      router.push('/vendor/dashboard');
+      router.push("/vendor/dashboard");
     } catch (error) {
       toast({
         title: "Error",
@@ -130,14 +136,16 @@ export default function CompanyPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <MainNav role="vendor" />
-      
+
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
             {companyId ? "Edit Theater" : "Add New Theater"}
           </h1>
           <p className="text-xl text-muted-foreground">
-            {companyId ? "Update your theater details" : "Set up a new theater location"}
+            {companyId
+              ? "Update your theater details"
+              : "Set up a new theater location"}
           </p>
         </div>
 
@@ -192,17 +200,23 @@ export default function CompanyPage() {
                         <Input
                           id={`seat-name-${index}`}
                           value={seat.name}
-                          onChange={(e) => handleSeatChange(index, 'name', e.target.value)}
+                          onChange={(e) =>
+                            handleSeatChange(index, "name", e.target.value)
+                          }
                           placeholder="e.g., Standard, VIP"
                         />
                       </div>
                       <div className="flex-1">
-                        <Label htmlFor={`seat-capacity-${index}`}>Capacity</Label>
+                        <Label htmlFor={`seat-capacity-${index}`}>
+                          Capacity
+                        </Label>
                         <Input
                           id={`seat-capacity-${index}`}
                           type="number"
                           value={seat.capacity}
-                          onChange={(e) => handleSeatChange(index, 'capacity', e.target.value)}
+                          onChange={(e) =>
+                            handleSeatChange(index, "capacity", e.target.value)
+                          }
                           min="1"
                         />
                       </div>
@@ -222,7 +236,7 @@ export default function CompanyPage() {
               <div className="flex justify-end gap-4 pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => router.push('/vendor/dashboard')}
+                  onClick={() => router.push("/vendor/dashboard")}
                 >
                   Cancel
                 </Button>

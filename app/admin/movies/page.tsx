@@ -4,11 +4,25 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Film, Plus, Trash, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -29,31 +43,37 @@ export default function MoviesPage() {
     duration: "",
     image: "",
   });
-  
+
+  const { getMovies } = useMovieStore();
+
   useEffect(() => {
+    const fetchMovies = async () => {
+      await getMovies();
+    };
+    fetchMovies();
     setIsClient(true);
   }, []);
 
   // Redirect if not admin
   useEffect(() => {
-    if (isClient && (!user || user.type !== 'admin')) {
-      router.push('/login');
+    if (isClient && (!user || user.type !== "admin")) {
+      router.push("/login");
     }
   }, [user, router, isClient]);
 
-  if (!isClient || !user || user.type !== 'admin') {
+  if (!isClient || !user || user.type !== "admin") {
     return null;
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const movieData = {
         name: formData.name,
-        type: 'movie' as const,
+        type: "movie" as const,
         description: formData.description,
-        genre: formData.genre.split(',').map(g => g.trim()),
+        genre: formData.genre.split(",").map((g) => g.trim()),
         duration: parseInt(formData.duration),
         image: formData.image,
         userId: user.id,
@@ -96,7 +116,7 @@ export default function MoviesPage() {
     setFormData({
       name: movie.name,
       description: movie.description,
-      genre: movie.genre.join(', '),
+      genre: movie.genre.join(", "),
       duration: movie.duration.toString(),
       image: movie.image,
     });
@@ -122,7 +142,7 @@ export default function MoviesPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <MainNav role="admin" />
-      
+
       <div className="px-4 md:mx-32 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -133,7 +153,7 @@ export default function MoviesPage() {
               Manage movies in the system
             </p>
           </div>
-          
+
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -143,68 +163,80 @@ export default function MoviesPage() {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>{editingMovie ? "Edit Movie" : "Add New Movie"}</DialogTitle>
+                <DialogTitle>
+                  {editingMovie ? "Edit Movie" : "Add New Movie"}
+                </DialogTitle>
                 <DialogDescription>
-                  {editingMovie 
+                  {editingMovie
                     ? "Update the movie details below."
                     : "Fill in the details below to add a new movie."}
                 </DialogDescription>
               </DialogHeader>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Movie Name</Label>
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
                   <Input
                     id="description"
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="genre">Genres (comma-separated)</Label>
                   <Input
                     id="genre"
                     value={formData.genre}
-                    onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, genre: e.target.value })
+                    }
                     placeholder="Action, Drama, Sci-Fi"
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="duration">Duration (minutes)</Label>
                   <Input
                     id="duration"
                     type="number"
                     value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, duration: e.target.value })
+                    }
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="image">Image URL</Label>
                   <Input
                     id="image"
                     value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, image: e.target.value })
+                    }
                     placeholder="https://example.com/movie-image.jpg"
                     required
                   />
                 </div>
-                
+
                 <DialogFooter>
                   <Button type="submit">
                     {editingMovie ? "Update Movie" : "Add Movie"}
@@ -214,7 +246,7 @@ export default function MoviesPage() {
             </DialogContent>
           </Dialog>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {movies.map((movie, index) => (
             <motion.div
@@ -234,7 +266,8 @@ export default function MoviesPage() {
                 <CardHeader>
                   <CardTitle>{movie.name}</CardTitle>
                   <CardDescription>
-                    {movie.genre.join(', ')} • {Math.floor(movie.duration / 60)}h {movie.duration % 60}m
+                    {movie.genre.join(", ")} • {Math.floor(movie.duration / 60)}
+                    h {movie.duration % 60}m
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -264,7 +297,7 @@ export default function MoviesPage() {
             </motion.div>
           ))}
         </div>
-        
+
         {movies.length === 0 && (
           <div className="text-center py-16">
             <Film className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />

@@ -10,15 +10,17 @@ export interface User {
 }
 
 export interface Movie {
-  id: string;
+  id?: string;
+  _id?: string;
   name: string;
   type: 'movie';
   description: string;
   genre: string[];
   duration: number; // in minutes
   image: string;
-  userId: string;
-  createdAt: string;
+  userId?: string;
+  createdAt?: string;
+  rating?: number;
 }
 
 export interface Company {
