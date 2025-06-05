@@ -4,11 +4,23 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CalendarCheck2, Plus, Trash } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -18,38 +30,34 @@ export default function SchedulePage() {
   const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
-  const { 
-    getCompaniesByUserId, 
-    getMovies,
-    schedules,
-    addSchedule 
-  } = useMovieStore();
+  const { getCompaniesByUserId, getMovies, schedules, addSchedule, movies } =
+    useMovieStore();
 
   const [isClient, setIsClient] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [selectedMovie, setSelectedMovie] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [seatTypes, setSeatTypes] = useState<{ name: string; price: number; capacity: number }[]>([]);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const [seatTypes, setSeatTypes] = useState<
+    { name: string; price: number; capacity: number }[]
+  >([]);
 
   // Redirect if not vendor
   useEffect(() => {
-    if (isClient && (!user || user.type !== 'vendor')) {
-      router.push('/login');
+    if (isClient && (!user || user.type !== "vendor")) {
+      router.push("/login");
     }
   }, [user, router, isClient]);
 
-  if (!isClient || !user || user.type !== 'vendor') {
+  if (!isClient || !user || user.type !== "vendor") {
     return null;
   }
 
   const companies = getCompaniesByUserId(user.id);
-  const movies = getMovies();
-  const vendorSchedules = schedules.filter(schedule => schedule.userId === user.id);
+  // const movies = getMovies();
+  const vendorSchedules = schedules.filter(
+    (schedule) => schedule.userId === user.id
+  );
 
   const handleAddSeatType = () => {
     setSeatTypes([...seatTypes, { name: "", price: 0, capacity: 0 }]);
@@ -59,17 +67,31 @@ export default function SchedulePage() {
     setSeatTypes(seatTypes.filter((_, i) => i !== index));
   };
 
-  const handleSeatTypeChange = (index: number, field: string, value: string | number) => {
+  const handleSeatTypeChange = (
+    index: number,
+    field: string,
+    value: string | number
+  ) => {
     const newSeatTypes = [...seatTypes];
     newSeatTypes[index] = {
       ...newSeatTypes[index],
-      [field]: field === 'name' ? value : Number(value)
+      [field]: field === "name" ? value : Number(value),
     };
     setSeatTypes(newSeatTypes);
   };
 
+  const getMoviesData = async () => {
+    await getMovies();
+  };
+
   const handleSubmit = () => {
-    if (!selectedCompany || !selectedMovie || !date || !time || seatTypes.length === 0) {
+    if (
+      !selectedCompany ||
+      !selectedMovie ||
+      !date ||
+      !time ||
+      seatTypes.length === 0
+    ) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields",
@@ -102,16 +124,22 @@ export default function SchedulePage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create schedule",
+        description:
+          error instanceof Error ? error.message : "Failed to create schedule",
         variant: "destructive",
       });
     }
   };
 
+  useEffect(() => {
+    setIsClient(true);
+    getMoviesData();
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col">
       <MainNav role="vendor" />
-      
+
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
@@ -137,7 +165,10 @@ export default function SchedulePage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="company">Theater</Label>
-                  <Select value={selectedCompany} onValueChange={setSelectedCompany}>
+                  <Select
+                    value={selectedCompany}
+                    onValueChange={setSelectedCompany}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select theater" />
                     </SelectTrigger>
@@ -153,7 +184,10 @@ export default function SchedulePage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="movie">Movie</Label>
-                  <Select value={selectedMovie} onValueChange={setSelectedMovie}>
+                  <Select
+                    value={selectedMovie}
+                    onValueChange={setSelectedMovie}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select movie" />
                     </SelectTrigger>
@@ -191,9 +225,9 @@ export default function SchedulePage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <Label>Seat Types</Label>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={handleAddSeatType}
                       className="h-8"
                     >
@@ -201,7 +235,7 @@ export default function SchedulePage() {
                       Add Type
                     </Button>
                   </div>
-                  
+
                   {seatTypes.map((seatType, index) => (
                     <motion.div
                       key={index}
@@ -214,7 +248,9 @@ export default function SchedulePage() {
                         <Label>Name</Label>
                         <Input
                           value={seatType.name}
-                          onChange={(e) => handleSeatTypeChange(index, 'name', e.target.value)}
+                          onChange={(e) =>
+                            handleSeatTypeChange(index, "name", e.target.value)
+                          }
                           placeholder="e.g., VIP"
                         />
                       </div>
@@ -223,7 +259,9 @@ export default function SchedulePage() {
                         <Input
                           type="number"
                           value={seatType.price}
-                          onChange={(e) => handleSeatTypeChange(index, 'price', e.target.value)}
+                          onChange={(e) =>
+                            handleSeatTypeChange(index, "price", e.target.value)
+                          }
                           min="0"
                           step="0.01"
                         />
@@ -234,7 +272,13 @@ export default function SchedulePage() {
                           <Input
                             type="number"
                             value={seatType.capacity}
-                            onChange={(e) => handleSeatTypeChange(index, 'capacity', e.target.value)}
+                            onChange={(e) =>
+                              handleSeatTypeChange(
+                                index,
+                                "capacity",
+                                e.target.value
+                              )
+                            }
                             min="1"
                           />
                         </div>
@@ -273,9 +317,13 @@ export default function SchedulePage() {
                 {vendorSchedules.length > 0 ? (
                   <div className="space-y-4">
                     {vendorSchedules.map((schedule) => {
-                      const movie = movies.find(m => m.id === schedule.eventId);
-                      const company = companies.find(c => c.id === schedule.companyId);
-                      
+                      const movie = movies.find(
+                        (m) => m.id === schedule.eventId
+                      );
+                      const company = companies.find(
+                        (c) => c.id === schedule.companyId
+                      );
+
                       return (
                         <motion.div
                           key={schedule.id}
@@ -290,13 +338,17 @@ export default function SchedulePage() {
                             </p>
                             <div className="flex items-center text-sm text-muted-foreground mt-1">
                               <CalendarCheck2 className="h-4 w-4 mr-1" />
-                              <span>{schedule.date} at {schedule.time}</span>
+                              <span>
+                                {schedule.date} at {schedule.time}
+                              </span>
                             </div>
                           </div>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => router.push(`/vendor/schedule?id=${schedule.id}`)}
+                            onClick={() =>
+                              router.push(`/vendor/schedule?id=${schedule.id}`)
+                            }
                           >
                             View Details
                           </Button>

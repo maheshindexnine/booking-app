@@ -24,6 +24,7 @@ export interface Movie {
 }
 
 export interface Company {
+  _id: string;
   id: string;
   userId: string;
   name: string;
@@ -33,6 +34,7 @@ export interface Company {
 export interface Seat {
   name: string;
   capacity: number;
+  price?: number;
 }
 
 export interface EventSchedule {

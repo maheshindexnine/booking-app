@@ -4,45 +4,50 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Building2, CalendarCheck2, TicketCheck, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Company } from "@/types";
+import { useCompanyStore } from "@/lib/companies";
 
 export default function VendorDashboard() {
   const { user } = useAuth();
-  const { getCompaniesByUserId, schedules } = useMovieStore();
+  const { schedules } = useMovieStore();
+  const { getCompanies, companies } = useCompanyStore();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
-  const [companies, setCompanies] = useState<Company[]>([]);
-  
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+
+  const getCompaniesData = async () => await getCompanies();
 
   useEffect(() => {
-    if (user) {
-      const vendorCompanies = getCompaniesByUserId(user.id);
-      setCompanies(vendorCompanies);
-    }
-  }, [user, getCompaniesByUserId]);
+    setIsClient(true);
+    getCompaniesData();
+  }, []);
 
   // Redirect if not vendor
   useEffect(() => {
-    if (isClient && (!user || user.type !== 'vendor')) {
-      router.push('/login');
+    if (isClient && (!user || user.type !== "vendor")) {
+      router.push("/login");
     }
   }, [user, router, isClient]);
 
-  if (!isClient || !user || user.type !== 'vendor') {
+  if (!isClient || !user || user.type !== "vendor") {
     return null; // Don't render anything while checking auth
   }
 
   // Get schedules for this vendor
-  const vendorSchedules = schedules.filter(schedule => schedule.userId === user.id);
-  
+  const vendorSchedules = schedules.filter(
+    (schedule) => schedule.userId === user.id
+  );
+
   // Mock values for stats
   const totalCustomers = 45;
   const totalBookings = 152;
@@ -50,7 +55,7 @@ export default function VendorDashboard() {
   return (
     <div className="flex min-h-screen flex-col">
       <MainNav role="vendor" />
-      
+
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
@@ -60,7 +65,7 @@ export default function VendorDashboard() {
             Manage your theaters and movie schedules
           </p>
         </div>
-        
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -101,7 +106,9 @@ export default function VendorDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{vendorSchedules.length}</div>
+                <div className="text-2xl font-bold">
+                  {vendorSchedules.length}
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -150,7 +157,7 @@ export default function VendorDashboard() {
             </Card>
           </motion.div>
         </div>
-        
+
         <div className="grid gap-6 mt-6 md:grid-cols-2">
           <Card className="bg-card/60 backdrop-blur-sm border-2 border-border/50 shadow-md">
             <CardHeader>
@@ -161,17 +168,26 @@ export default function VendorDashboard() {
               {companies.length > 0 ? (
                 <ul className="space-y-4">
                   {companies.map((company) => (
-                    <li key={company.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <li
+                      key={company.id}
+                      className="flex items-center justify-between p-3 border rounded-lg"
+                    >
                       <div>
                         <p className="font-medium">{company.name}</p>
                         <p className="text-xs text-muted-foreground">
-                          {company.seats.reduce((total, seat) => total + seat.capacity, 0)} total seats
+                          {company.seats.reduce(
+                            (total, seat) => total + seat.capacity,
+                            0
+                          )}{" "}
+                          total seats
                         </p>
                       </div>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
-                        onClick={() => router.push(`/vendor/company?id=${company.id}`)}
+                        onClick={() =>
+                          router.push(`/vendor/company?id=${company._id}`)
+                        }
                       >
                         Manage
                       </Button>
@@ -187,17 +203,19 @@ export default function VendorDashboard() {
                 </div>
               )}
               <div className="mt-4">
-                <Button 
-                  variant={companies.length > 0 ? "outline" : "default"} 
+                <Button
+                  variant={companies.length > 0 ? "outline" : "default"}
                   className="w-full"
-                  onClick={() => router.push('/vendor/company')}
+                  onClick={() => router.push("/vendor/company")}
                 >
-                  {companies.length > 0 ? "Add Another Theater" : "Add Your First Theater"}
+                  {companies.length > 0
+                    ? "Add Another Theater"
+                    : "Add Your First Theater"}
                 </Button>
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-card/60 backdrop-blur-sm border-2 border-border/50 shadow-md">
             <CardHeader>
               <CardTitle>Recent Schedules</CardTitle>
@@ -207,19 +225,26 @@ export default function VendorDashboard() {
               {vendorSchedules.length > 0 ? (
                 <ul className="space-y-4">
                   {vendorSchedules.slice(0, 5).map((schedule) => {
-                    const movie = useMovieStore.getState().getMovieById(schedule.eventId);
+                    const movie = useMovieStore
+                      .getState()
+                      .getMovieById(schedule.eventId);
                     return (
-                      <li key={schedule.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <li
+                        key={schedule.id}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <div>
                           <p className="font-medium">{movie?.name}</p>
                           <p className="text-xs text-muted-foreground">
                             {schedule.date} • {schedule.time}
                           </p>
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
-                          onClick={() => router.push(`/vendor/schedule?id=${schedule.id}`)}
+                          onClick={() =>
+                            router.push(`/vendor/schedule?id=${schedule.id}`)
+                          }
                         >
                           Details
                         </Button>
@@ -236,12 +261,14 @@ export default function VendorDashboard() {
                 </div>
               )}
               <div className="mt-4">
-                <Button 
-                  variant={vendorSchedules.length > 0 ? "outline" : "default"} 
+                <Button
+                  variant={vendorSchedules.length > 0 ? "outline" : "default"}
                   className="w-full"
-                  onClick={() => router.push('/vendor/schedule')}
+                  onClick={() => router.push("/vendor/schedule")}
                 >
-                  {vendorSchedules.length > 0 ? "Schedule More Shows" : "Create Your First Schedule"}
+                  {vendorSchedules.length > 0
+                    ? "Schedule More Shows"
+                    : "Create Your First Schedule"}
                 </Button>
               </div>
             </CardContent>

@@ -18,6 +18,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Building2, Plus, Trash } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { useCompanyStore } from "@/lib/companies";
 
 export default function CompanyPage() {
   const { user } = useAuth();
@@ -28,6 +29,11 @@ export default function CompanyPage() {
 
   const { getCompanyById, getCompaniesByUserId, addCompany, updateCompany } =
     useMovieStore();
+  const {
+    addCompany: addCompanyToCompanyStore,
+    updateCompany: updateCompanyToCompanyStore,
+    getCompanyById: getCompanyByIdFromCompanyStore,
+  } = useCompanyStore();
 
   const [isClient, setIsClient] = useState(false);
   const [companyName, setCompanyName] = useState("");
@@ -42,14 +48,16 @@ export default function CompanyPage() {
   }, []);
 
   useEffect(() => {
+    console.log(companyId, " eeffef asd kas");
+    
     if (companyId) {
-      const company = getCompanyById(companyId);
+      const company = getCompanyByIdFromCompanyStore(companyId);
       if (company) {
         setCompanyName(company.name);
         setSeats(company.seats);
       }
     }
-  }, [companyId, getCompanyById]);
+  }, [companyId, getCompanyByIdFromCompanyStore]);
 
   // Redirect if not vendor
   useEffect(() => {
@@ -104,7 +112,7 @@ export default function CompanyPage() {
 
     try {
       if (companyId) {
-        updateCompany(companyId, {
+        updateCompanyToCompanyStore(companyId, {
           name: companyName,
           seats,
         });
@@ -113,8 +121,7 @@ export default function CompanyPage() {
           description: "Theater updated successfully",
         });
       } else {
-        addCompany({
-          userId: user.id,
+        addCompanyToCompanyStore({
           name: companyName,
           seats,
         });
