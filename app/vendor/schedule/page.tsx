@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
 import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
+import { Company, Movie } from "@/types";
 import {
   Card,
   CardContent,
@@ -25,22 +26,62 @@ import { CalendarCheck2, Plus, Trash } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useCompanyStore } from "@/lib/companies";
+import { useEventScheduleStore } from "@/lib/eventSchedules";
 
 export default function SchedulePage() {
   const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
-  const { getCompaniesByUserId, getMovies, schedules, addSchedule, movies } =
+  const { getCompaniesByUserId, getMovies, schedules, movies } =
     useMovieStore();
-
+  const { createSchedule } = useEventScheduleStore();
+  const { getCompanies, companies, getCompanyById } = useCompanyStore();
+  const { schedules: schedulesData } = useEventScheduleStore();
   const [isClient, setIsClient] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState<string>("");
   const [selectedMovie, setSelectedMovie] = useState("");
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
   const [seatTypes, setSeatTypes] = useState<
     { name: string; price: number; capacity: number }[]
   >([]);
+
+  // Add effect to handle company selection
+  useEffect(() => {
+    setSeatTypes([]);
+    const fetchCompanySeats = async () => {
+      if (selectedCompany) {
+        const company = await getCompanyById(selectedCompany);
+        if (company && company.seats) {
+          // Map the seats to the required format
+          const formattedSeats = company.seats.map((seat) => ({
+            name: seat.name,
+            price: seat.price || 0,
+            capacity: seat.capacity,
+          }));
+          setSeatTypes(formattedSeats);
+        }
+      } else {
+        setSeatTypes([]);
+      }
+    };
+
+    fetchCompanySeats();
+  }, [selectedCompany, getCompanyById]);
+
+  const getMoviesData = async () => {
+    await getMovies();
+  };
+
+  const getCompaniesData = async () => {
+    await getCompanies();
+  };
+
+  useEffect(() => {
+    setIsClient(true);
+    getMoviesData();
+    getCompaniesData();
+  }, []);
 
   // Redirect if not vendor
   useEffect(() => {
@@ -53,8 +94,6 @@ export default function SchedulePage() {
     return null;
   }
 
-  const companies = getCompaniesByUserId(user.id);
-  // const movies = getMovies();
   const vendorSchedules = schedules.filter(
     (schedule) => schedule.userId === user.id
   );
@@ -80,18 +119,8 @@ export default function SchedulePage() {
     setSeatTypes(newSeatTypes);
   };
 
-  const getMoviesData = async () => {
-    await getMovies();
-  };
-
   const handleSubmit = () => {
-    if (
-      !selectedCompany ||
-      !selectedMovie ||
-      !date ||
-      !time ||
-      seatTypes.length === 0
-    ) {
+    if (!selectedCompany || !selectedMovie || !date || seatTypes.length === 0) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields",
@@ -101,12 +130,11 @@ export default function SchedulePage() {
     }
 
     try {
-      addSchedule({
+      createSchedule({
         userId: user.id,
         companyId: selectedCompany,
         eventId: selectedMovie,
         date,
-        time,
         seatTypes,
       });
 
@@ -114,12 +142,13 @@ export default function SchedulePage() {
         title: "Schedule Created",
         description: "New movie schedule has been created successfully",
       });
+      
+      router.push(`/vendor/dashboard`);
 
       // Reset form
       setSelectedCompany("");
       setSelectedMovie("");
       setDate("");
-      setTime("");
       setSeatTypes([]);
     } catch (error) {
       toast({
@@ -130,11 +159,6 @@ export default function SchedulePage() {
       });
     }
   };
-
-  useEffect(() => {
-    setIsClient(true);
-    getMoviesData();
-  }, []);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -167,17 +191,24 @@ export default function SchedulePage() {
                   <Label htmlFor="company">Theater</Label>
                   <Select
                     value={selectedCompany}
-                    onValueChange={setSelectedCompany}
+                    onValueChange={(value: string) => setSelectedCompany(value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select theater" />
                     </SelectTrigger>
                     <SelectContent>
-                      {companies.map((company) => (
-                        <SelectItem key={company.id} value={company.id}>
-                          {company.name}
-                        </SelectItem>
-                      ))}
+                      {companies
+                        .filter(
+                          (
+                            company: Company
+                          ): company is Company & { _id: string } =>
+                            Boolean(company._id)
+                        )
+                        .map((company) => (
+                          <SelectItem key={company._id} value={company._id}>
+                            {company.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -192,16 +223,21 @@ export default function SchedulePage() {
                       <SelectValue placeholder="Select movie" />
                     </SelectTrigger>
                     <SelectContent>
-                      {movies.map((movie) => (
-                        <SelectItem key={movie.id} value={movie.id}>
-                          {movie.name}
-                        </SelectItem>
-                      ))}
+                      {movies
+                        .filter(
+                          (movie: Movie): movie is Movie & { _id: string } =>
+                            Boolean(movie._id)
+                        )
+                        .map((movie) => (
+                          <SelectItem key={movie._id} value={movie._id}>
+                            {movie.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="date">Date</Label>
                     <Input
@@ -211,7 +247,7 @@ export default function SchedulePage() {
                       onChange={(e) => setDate(e.target.value)}
                     />
                   </div>
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="time">Time</Label>
                     <Input
                       id="time"
@@ -219,13 +255,13 @@ export default function SchedulePage() {
                       value={time}
                       onChange={(e) => setTime(e.target.value)}
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <Label>Seat Types</Label>
-                    <Button
+                    {/* <Button
                       variant="outline"
                       size="sm"
                       onClick={handleAddSeatType}
@@ -233,9 +269,13 @@ export default function SchedulePage() {
                     >
                       <Plus className="h-4 w-4 mr-1" />
                       Add Type
-                    </Button>
+                    </Button> */}
                   </div>
-
+                  {!seatTypes.length && (
+                    <p className="text-muted-foreground">
+                      Select theater for seats
+                    </p>
+                  )}
                   {seatTypes.map((seatType, index) => (
                     <motion.div
                       key={index}
@@ -251,45 +291,51 @@ export default function SchedulePage() {
                           onChange={(e) =>
                             handleSeatTypeChange(index, "name", e.target.value)
                           }
+                          disabled={true}
                           placeholder="e.g., VIP"
                         />
                       </div>
                       <div>
-                        <Label>Price ($)</Label>
+                        <Label>Capacity</Label>
                         <Input
                           type="number"
-                          value={seatType.price}
+                          value={seatType.capacity}
                           onChange={(e) =>
-                            handleSeatTypeChange(index, "price", e.target.value)
+                            handleSeatTypeChange(
+                              index,
+                              "capacity",
+                              e.target.value
+                            )
                           }
-                          min="0"
-                          step="0.01"
+                          min="1"
+                          disabled={true}
                         />
                       </div>
                       <div className="flex gap-2">
                         <div className="flex-1">
-                          <Label>Capacity</Label>
+                          <Label>Price ($)</Label>
                           <Input
                             type="number"
-                            value={seatType.capacity}
+                            value={seatType.price}
                             onChange={(e) =>
                               handleSeatTypeChange(
                                 index,
-                                "capacity",
+                                "price",
                                 e.target.value
                               )
                             }
-                            min="1"
+                            min="0"
+                            step="0.01"
                           />
                         </div>
-                        <Button
+                        {/* <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => handleRemoveSeatType(index)}
                           className="h-10 w-10 shrink-0"
                         >
                           <Trash className="h-4 w-4" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </motion.div>
                   ))}
@@ -314,32 +360,25 @@ export default function SchedulePage() {
                 <CardDescription>Your active movie schedules</CardDescription>
               </CardHeader>
               <CardContent>
-                {vendorSchedules.length > 0 ? (
+                {schedulesData.length > 0 ? (
                   <div className="space-y-4">
                     {vendorSchedules.map((schedule) => {
-                      const movie = movies.find(
-                        (m) => m.id === schedule.eventId
-                      );
-                      const company = companies.find(
-                        (c) => c.id === schedule.companyId
-                      );
-
                       return (
                         <motion.div
-                          key={schedule.id}
+                          key={schedule._id}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           className="flex items-center justify-between p-4 border rounded-lg"
                         >
                           <div>
-                            <p className="font-medium">{movie?.name}</p>
+                            <p className="font-medium">{schedule?.eventId?.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              {company?.name}
+                              {schedule?.companyId?.name}
                             </p>
                             <div className="flex items-center text-sm text-muted-foreground mt-1">
                               <CalendarCheck2 className="h-4 w-4 mr-1" />
                               <span>
-                                {schedule.date} at {schedule.time}
+                                {schedule.date}
                               </span>
                             </div>
                           </div>
@@ -347,7 +386,7 @@ export default function SchedulePage() {
                             variant="outline"
                             size="sm"
                             onClick={() =>
-                              router.push(`/vendor/schedule?id=${schedule.id}`)
+                              router.push(`/vendor/schedule?id=${schedule._id}`)
                             }
                           >
                             View Details

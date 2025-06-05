@@ -225,7 +225,7 @@ export const useMovieStore = create<MovieState>((set, get) => ({
       set({ movies });
       return movies;
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error("Error fetching movies:", error);
       return get().movies; // Return existing movies if API call fails
     }
   },

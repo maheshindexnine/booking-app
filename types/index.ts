@@ -10,8 +10,8 @@ export interface User {
 }
 
 export interface Movie {
+  _id: string;
   id?: string;
-  _id?: string;
   name: string;
   type: 'movie';
   description: string;
@@ -25,7 +25,7 @@ export interface Movie {
 
 export interface Company {
   _id: string;
-  id: string;
+  id?: string;
   userId: string;
   name: string;
   seats: Seat[];
@@ -37,14 +37,30 @@ export interface Seat {
   price?: number;
 }
 
-export interface EventSchedule {
-  id: string;
+export interface CompanyId {
+  _id: string;
   userId: string;
-  companyId: string;
-  eventId: string;
+  name: string;
+  seats: Seat[];
+}
+
+export interface EventId {
+  _id: string;
+  name: string;
+  type: 'movie';
+  description: string;
+  genre: string[];
+}
+
+export interface EventSchedule {
+  _id?: string;
+  userId: string;
+  companyId?: CompanyId | string;
+  eventId?: Movie | string;
   date: string;
-  time: string;
   seatTypes: SeatType[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface SeatType {

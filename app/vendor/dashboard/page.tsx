@@ -17,19 +17,24 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Company } from "@/types";
 import { useCompanyStore } from "@/lib/companies";
+import { useEventScheduleStore } from "@/lib/eventSchedules";
+import moment from "moment";
 
 export default function VendorDashboard() {
   const { user } = useAuth();
   const { schedules } = useMovieStore();
   const { getCompanies, companies } = useCompanyStore();
+  const { getSchedules, schedules: schedulesData } = useEventScheduleStore();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
   const getCompaniesData = async () => await getCompanies();
+  const getSchedulesData = async () => await getSchedules();
 
   useEffect(() => {
     setIsClient(true);
     getCompaniesData();
+    getSchedulesData();
   }, []);
 
   // Redirect if not vendor
@@ -222,28 +227,27 @@ export default function VendorDashboard() {
               <CardDescription>Your upcoming movie screenings</CardDescription>
             </CardHeader>
             <CardContent>
-              {vendorSchedules.length > 0 ? (
+              {schedulesData.length > 0 ? (
                 <ul className="space-y-4">
-                  {vendorSchedules.slice(0, 5).map((schedule) => {
-                    const movie = useMovieStore
-                      .getState()
-                      .getMovieById(schedule.eventId);
+                  {schedulesData.slice(0, 5).map((schedule) => {
                     return (
                       <li
-                        key={schedule.id}
+                        key={schedule._id}
                         className="flex items-center justify-between p-3 border rounded-lg"
                       >
                         <div>
-                          <p className="font-medium">{movie?.name}</p>
+                          <p className="font-medium">
+                            {schedule?.eventId?.name}
+                          </p>
                           <p className="text-xs text-muted-foreground">
-                            {schedule.date} • {schedule.time}
+                            {moment(schedule.date).format("MMMM Do YYYY")}
                           </p>
                         </div>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() =>
-                            router.push(`/vendor/schedule?id=${schedule.id}`)
+                            router.push(`/vendor/schedule?id=${schedule._id}`)
                           }
                         >
                           Details
