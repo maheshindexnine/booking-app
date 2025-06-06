@@ -175,7 +175,7 @@ export default function VendorDashboard() {
                   {companies.map((company) => (
                     <li
                       key={company.id}
-                      className="flex items-center justify-between p-3 border rounded-lg"
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-red-400 hover:scale-x-105 transition-all duration-300"
                     >
                       <div>
                         <p className="font-medium">{company.name}</p>
@@ -233,11 +233,14 @@ export default function VendorDashboard() {
                     return (
                       <li
                         key={schedule._id}
-                        className="flex items-center justify-between p-3 border rounded-lg"
+                        className="flex items-center justify-between p-3 border rounded-lg hover:bg-red-400 hover:scale-x-105 transition-all duration-300"
                       >
                         <div>
                           <p className="font-medium">
                             {schedule?.eventId?.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {schedule?.companyId?.name}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {moment(schedule.date).format("MMMM Do YYYY")}

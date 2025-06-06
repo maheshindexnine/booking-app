@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useCompanyStore } from "@/lib/companies";
 import { useEventScheduleStore } from "@/lib/eventSchedules";
+import moment from "moment";
 
 export default function SchedulePage() {
   const { user } = useAuth();
@@ -142,7 +143,7 @@ export default function SchedulePage() {
         title: "Schedule Created",
         description: "New movie schedule has been created successfully",
       });
-      
+
       router.push(`/vendor/dashboard`);
 
       // Reset form
@@ -362,23 +363,25 @@ export default function SchedulePage() {
               <CardContent>
                 {schedulesData.length > 0 ? (
                   <div className="space-y-4">
-                    {vendorSchedules.map((schedule) => {
+                    {schedulesData.map((schedule) => {
                       return (
                         <motion.div
                           key={schedule._id}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          className="flex items-center justify-between p-4 border rounded-lg"
+                          className="flex items-center justify-between p-4 border rounded-lg hover:bg-red-400 hover:scale-x-105 transition-all duration-300"
                         >
                           <div>
-                            <p className="font-medium">{schedule?.eventId?.name}</p>
+                            <p className="font-medium">
+                              {schedule?.eventId?.name}
+                            </p>
                             <p className="text-sm text-muted-foreground">
                               {schedule?.companyId?.name}
                             </p>
                             <div className="flex items-center text-sm text-muted-foreground mt-1">
                               <CalendarCheck2 className="h-4 w-4 mr-1" />
                               <span>
-                                {schedule.date}
+                                {moment(schedule.date).format("MMMM Do YYYY")}
                               </span>
                             </div>
                           </div>
