@@ -186,7 +186,7 @@ interface MovieState {
 
   // Actions
   getMovies: () => Promise<Movie[]>;
-  getMovieById: (id: string) => Movie | undefined;
+  getMovieById: (id: string) => Promise<Movie | undefined>;
   getSchedulesForMovie: (movieId: string) => EventSchedule[];
   getSeatsForSchedule: (scheduleId: string) => EventSeat[];
   selectMovie: (movie: Movie) => void;
@@ -230,7 +230,16 @@ export const useMovieStore = create<MovieState>((set, get) => ({
     }
   },
 
-  getMovieById: (id) => get().movies.find((movie) => movie.id === id),
+  getMovieById: async (id: string) => {
+    try {
+      const movie = await movieService.getMovieById(id);
+      set({ selectedMovie: movie ?? null });
+      return movie;
+    } catch (error) {
+      console.error("Error fetching movie:", error);
+      return undefined;
+    }
+  },
 
   getSchedulesForMovie: (movieId) =>
     get().schedules.filter((schedule) => schedule.eventId === movieId),

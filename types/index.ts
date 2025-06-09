@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'vendor' | 'user';
+export type UserRole = "admin" | "vendor" | "user";
 
 export interface User {
   id: string;
@@ -13,7 +13,7 @@ export interface Movie {
   _id: string;
   id?: string;
   name: string;
-  type: 'movie';
+  type: "movie";
   description: string;
   genre: string[];
   duration: number; // in minutes
@@ -32,9 +32,22 @@ export interface Company {
 }
 
 export interface Seat {
-  name: string;
-  capacity: number;
-  price?: number;
+  // id: string;
+  // eventId: string;
+  // seatNumber: string;
+  // status: "available" | "booked";
+  // price: number;
+  // row: string;
+  // section: string;
+  // createdAt: string;
+  // updatedAt: string;
+  _id: string;
+  eventScheduleId: string;
+  seatName: string;
+  row?: string;
+  seatNo: number;
+  booked: boolean;
+  price: number;
 }
 
 export interface CompanyId {
@@ -47,7 +60,7 @@ export interface CompanyId {
 export interface EventId {
   _id: string;
   name: string;
-  type: 'movie';
+  type: "movie";
   description: string;
   genre: string[];
 }
@@ -70,12 +83,13 @@ export interface SeatType {
 }
 
 export interface EventSeat {
-  id: string;
+  _id: string;
   eventScheduleId: string;
-  seatType: string;
+  seatName: string;
   row: string;
-  number: number;
-  status: 'available' | 'reserved' | 'booked';
+  seatNo: number;
+  booked: boolean;
+  price: number;
 }
 
 export interface Booking {
@@ -84,6 +98,6 @@ export interface Booking {
   eventScheduleId: string;
   seats: string[]; // Array of EventSeat IDs
   totalAmount: number;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  status: "pending" | "confirmed" | "cancelled";
   createdAt: string;
 }

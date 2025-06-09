@@ -23,15 +23,15 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
-      className={cn(
-        featured && "md:col-span-2 md:row-span-2"
-      )}
+      className={cn(featured && "md:col-span-2 md:row-span-2")}
     >
       <Card className="overflow-hidden h-full flex flex-col bg-card/60 backdrop-blur-sm shadow-md hover:shadow-xl transition-all border-2 border-border/50">
-        <div className={cn(
-          "relative overflow-hidden",
-          featured ? "aspect-[2/1]" : "aspect-[2/3]"
-        )}>
+        <div
+          className={cn(
+            "relative overflow-hidden",
+            featured ? "aspect-[2/1]" : "aspect-[2/3]"
+          )}
+        >
           <img
             src={movie.image}
             alt={movie.name}
@@ -40,7 +40,11 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
           <div className="absolute top-2 right-2 flex flex-wrap gap-1 justify-end">
             {movie.genre.slice(0, 2).map((genre, i) => (
-              <Badge key={i} variant="secondary" className="bg-background/80 backdrop-blur-sm">
+              <Badge
+                key={i}
+                variant="secondary"
+                className="bg-background/80 backdrop-blur-sm"
+              >
                 {genre}
               </Badge>
             ))}
@@ -52,7 +56,9 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
             <div className="flex items-center gap-4 text-sm text-white/80">
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-1" />
-                <span>{Math.floor(movie.duration / 60)}h {movie.duration % 60}m</span>
+                <span>
+                  {Math.floor(movie.duration / 60)}h {movie.duration % 60}m
+                </span>
               </div>
               <div className="flex items-center">
                 <Star className="h-4 w-4 mr-1 text-yellow-500" />
@@ -67,9 +73,9 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
           </p>
         </CardContent>
         <CardFooter className="p-4 pt-0">
-          <Button 
-            className="w-full" 
-            onClick={() => router.push(`/movies/${movie.id}`)}
+          <Button
+            className="w-full"
+            onClick={() => router.push(`/movies/${movie._id}`)}
           >
             Book Now
           </Button>

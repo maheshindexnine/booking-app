@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronDown, FilterX, X } from "lucide-react";
 import { Movie } from "@/types";
@@ -23,9 +27,19 @@ export function MovieFilter({ movies, onFilter }: MovieFilterProps) {
   const [isDateOpen, setIsDateOpen] = useState(false);
 
   // Extract all unique genres
-  const allGenres = Array.from(
-    new Set(movies.flatMap((movie) => movie.genre))
-  ).sort();
+  const allGenres = [
+    "Action",
+    "Adventure",
+    "Comedy",
+    "Drama",
+    "Fantasy",
+    "Horror",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Thriller",
+    "Western",
+  ].sort();
 
   const toggleGenre = (genre: string) => {
     setSelectedGenres((current) =>
@@ -52,7 +66,7 @@ export function MovieFilter({ movies, onFilter }: MovieFilterProps) {
 
     // In a real app, we would also filter by date using the schedules data
     // For now, we'll just apply the genre filter
-    
+
     onFilter(filteredResults);
   };
 
@@ -64,9 +78,7 @@ export function MovieFilter({ movies, onFilter }: MovieFilterProps) {
 
   return (
     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="font-medium">
-        Showing {movies.length} movies
-      </div>
+      <div className="font-medium">Showing {movies.length} movies</div>
       <div className="flex flex-wrap items-center gap-2">
         <Popover open={isGenreOpen} onOpenChange={setIsGenreOpen}>
           <PopoverTrigger asChild>
@@ -125,7 +137,9 @@ export function MovieFilter({ movies, onFilter }: MovieFilterProps) {
               <ChevronDown className="mr-2 h-4 w-4" />
               Date
               {selectedDate && (
-                <Badge className="ml-2 bg-primary text-primary-foreground">1</Badge>
+                <Badge className="ml-2 bg-primary text-primary-foreground">
+                  1
+                </Badge>
               )}
             </Button>
           </PopoverTrigger>
@@ -151,9 +165,9 @@ export function MovieFilter({ movies, onFilter }: MovieFilterProps) {
         </Popover>
 
         {hasActiveFilters && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={clearFilters}
             className="h-9"
           >
@@ -166,7 +180,13 @@ export function MovieFilter({ movies, onFilter }: MovieFilterProps) {
   );
 }
 
-function Badge({ className, children }: { className?: string; children: React.ReactNode }) {
+function Badge({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className={cn("rounded-full px-1 text-xs font-medium", className)}>
       {children}

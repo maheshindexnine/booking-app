@@ -12,12 +12,12 @@ export default function MoviesPage() {
   const { getMovies } = useMovieStore();
   const { user } = useAuth();
   const [movies, setMovies] = useState<Movie[]>([]);
-  const role = user?.type || 'user';
+  const role = user?.type || "user";
+  const { movies: moviesData, getMovies: getMoviesData } = useMovieStore();
 
   useEffect(() => {
-    const allMovies = getMovies();
-    setMovies(allMovies);
-  }, [getMovies]);
+    getMoviesData();
+  }, []);
 
   const handleFilter = (filteredMovies: Movie[]) => {
     setMovies(filteredMovies);
@@ -36,21 +36,19 @@ export default function MoviesPage() {
           </p>
         </div>
 
-        <MovieFilter movies={getMovies()} onFilter={handleFilter} />
+        <MovieFilter movies={moviesData} onFilter={handleFilter} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {movies.map((movie, index) => (
-            <MovieCard 
-              key={movie.id} 
-              movie={movie} 
-              featured={index === 0}
-            />
+          {moviesData.map((movie, index) => (
+            <MovieCard key={movie._id} movie={movie} featured={index === 0} />
           ))}
         </div>
 
-        {movies.length === 0 && (
+        {moviesData.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No movies found matching your filters.</p>
+            <p className="text-muted-foreground">
+              No movies found matching your filters.
+            </p>
           </div>
         )}
       </div>
