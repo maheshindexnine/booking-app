@@ -326,7 +326,6 @@ export const useMovieStore = create<MovieState>((set, get) => ({
   addMovie: async (movieData) => {
     const newMovie: Movie = {
       ...movieData,
-      rating: 4.5,
     };
 
     const response = await movieService.createMovie(newMovie);

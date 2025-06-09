@@ -18,3 +18,13 @@ export function getNextDateItems(count: number): DateItem[] {
 
   return dates;
 }
+
+export function formatDuration(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  const hourStr = hours > 0 ? `${hours}h` : "";
+  const minStr = mins > 0 ? `${mins}m` : "";
+
+  return `${hourStr} ${minStr}`.trim();
+}

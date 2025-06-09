@@ -25,7 +25,7 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       className={cn(featured && "md:col-span-2 md:row-span-2")}
     >
-      <Card className="overflow-hidden h-full flex flex-col bg-card/60 backdrop-blur-sm shadow-md hover:shadow-xl transition-all border-2 border-border/50">
+      <Card className="overflow h-64 md:h-96 flex flex-col bg-card/60 backdrop-blur-sm shadow-md hover:shadow-xl transition-all border-2 border-border/50">
         <div
           className={cn(
             "relative overflow-hidden",
@@ -35,7 +35,7 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
           <img
             src={movie.image}
             alt={movie.name}
-            className="object-cover w-full h-full transition-all hover:scale-105"
+            className="w-full h-full transition-all hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
           <div className="absolute top-2 right-2 flex flex-wrap gap-1 justify-end">
@@ -62,7 +62,7 @@ export function MovieCard({ movie, featured = false }: MovieCardProps) {
               </div>
               <div className="flex items-center">
                 <Star className="h-4 w-4 mr-1 text-yellow-500" />
-                <span>4.5</span>
+                <span>{movie.rating}</span>
               </div>
             </div>
           </div>

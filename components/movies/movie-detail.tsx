@@ -37,6 +37,10 @@ import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useEventScheduleStore } from "@/lib/eventSchedules";
+import Image from "next/image";
+import { formatDuration, getNextDateItems } from "@/utils/common";
+import { useSeatStore } from "@/lib/seats";
 
 interface MovieDetailProps {
   movieId: string;
@@ -45,56 +49,54 @@ interface MovieDetailProps {
 export function MovieDetail({ movieId }: MovieDetailProps) {
   const router = useRouter();
   const { toast } = useToast();
-
+  const { getSchedules, schedules } = useEventScheduleStore();
+  const { getSeats, seats } = useSeatStore();
   const {
     getMovieById,
-    getSchedulesForMovie,
-    getSeatsForSchedule,
-    selectSchedule,
-    selectedSchedule,
+    selectedMovie,
+    clearSelectedSeats,
     selectedSeats,
     toggleSeatSelection,
-    clearSelectedSeats,
-    createBooking,
-    getCompaniesByUserId,
+    getSchedulesForMovie,
+    getSeatsForSchedule,
+    selectedSchedule,
   } = useMovieStore();
-
   const { user } = useAuth();
-  const [schedules, setSchedules] = useState<
-    ReturnType<typeof getSchedulesForMovie>
-  >([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTheater, setSelectedTheater] = useState<string>("");
-  const [seats, setSeats] = useState<ReturnType<typeof getSeatsForSchedule>>(
-    []
-  );
+  // const [seats, setSeats] = useState<ReturnType<typeof getSeatsForSchedule>>(
+  //   []
+  // );
   const [seatPrices, setSeatPrices] = useState<Record<string, number>>({});
   const [step, setStep] = useState<"date" | "theater" | "seats">("date");
   const role = user?.type || "user";
 
-  const movie = getMovieById(movieId);
+  const getMovieDetails = async () => {
+    await getMovieById(movieId);
+  };
+
+  const getTheaterLists = async () => {
+    await getSchedules();
+  };
+
+  const getSeatLists = async () => {
+    await getSeats({ eventScheduleId: selectedTheater });
+  };
 
   useEffect(() => {
-    if (movieId) {
-      const movieSchedules = getSchedulesForMovie(movieId);
-      setSchedules(movieSchedules);
+    if (movieId) getMovieDetails();
+  }, []);
 
-      // Set the first date as selected if there are schedules
-      if (movieSchedules.length > 0) {
-        const uniqueDates = [
-          ...new Set(movieSchedules.map((schedule) => schedule.date)),
-        ];
-        if (uniqueDates.length > 0) {
-          setSelectedDate(uniqueDates[0]);
-        }
-      }
+  useEffect(() => {
+    if (selectedDate) {
+      getTheaterLists();
     }
-  }, [movieId, getSchedulesForMovie]);
+  }, [selectedDate]);
 
   useEffect(() => {
     if (selectedSchedule) {
       const scheduleSeats = getSeatsForSchedule(selectedSchedule.id);
-      setSeats(scheduleSeats);
+      // setSeats(scheduleSeats);
 
       // Set seat prices based on the selected schedule
       const priceMap: Record<string, number> = {};
@@ -105,7 +107,13 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
     }
   }, [selectedSchedule, getSeatsForSchedule]);
 
-  if (!movie) {
+  useEffect(() => {
+    if (selectedTheater) {
+      getSeatLists();
+    }
+  }, [selectedTheater]);
+
+  if (!selectedMovie) {
     return (
       <div className="flex min-h-screen flex-col">
         <MainNav role={role} />
@@ -125,33 +133,29 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   }
 
   // Get unique dates from schedules
-  const uniqueDates = [...new Set(schedules.map((schedule) => schedule.date))];
+  // const uniqueDates = [...new Set(schedules.map((schedule) => schedule.date))];
 
+  const uniqueDates = getNextDateItems(5);
   // Get unique theaters for selected date
-  const theaters = [
-    ...new Set(
-      schedules
-        .filter((schedule) => schedule.date === selectedDate)
-        .map((schedule) => schedule.companyId)
-    ),
-  ].map((theaterId) => {
-    const schedule = schedules.find((s) => s.companyId === theaterId);
-    return {
-      id: theaterId,
-      name: schedule?.companyName || "Unknown Theater",
-    };
-  });
+
+  // const theaters = [
+  //   ...new Set(
+  //     schedules
+  //       .filter((schedule) => schedule.date === selectedDate)
+  //       .map((schedule) => schedule.companyId)
+  //   ),
+  // ].map((theaterId) => {
+  //   const schedule = schedules.find((s) => s.companyId === theaterId);
+  //   return {
+  //     id: theaterId,
+  //     name: schedule?.companyName || "Unknown Theater",
+  //   };
+  // });
 
   const handleTheaterSelect = (theaterId: string) => {
     setSelectedTheater(theaterId);
-    const schedule = schedules.find(
-      (s) => s.date === selectedDate && s.companyId === theaterId
-    );
-    if (schedule) {
-      selectSchedule(schedule);
-      clearSelectedSeats();
-      setStep("seats");
-    }
+    clearSelectedSeats();
+    setStep("seats");
   };
 
   const handleBooking = () => {
@@ -218,15 +222,17 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
             <Card className="overflow-hidden h-full bg-card/60 backdrop-blur-sm border-2 border-border/50 shadow-lg">
               <div className="relative aspect-[2/3]">
                 <img
-                  src={movie.image}
-                  alt={movie.name}
+                  src={selectedMovie.image}
+                  alt={selectedMovie.name}
                   className="object-cover w-full h-full"
                 />
               </div>
               <CardContent className="p-6">
-                <h1 className="text-3xl font-bold mb-3">{movie.name}</h1>
+                <h1 className="text-3xl font-bold mb-3">
+                  {selectedMovie.name}
+                </h1>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {movie.genre.map((genre, i) => (
+                  {selectedMovie.genre.map((genre, i) => (
                     <Badge key={i} variant="secondary">
                       {genre}
                     </Badge>
@@ -234,11 +240,11 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground mb-4">
                   <Clock className="h-4 w-4 mr-1" />
-                  <span>
-                    {Math.floor(movie.duration / 60)}h {movie.duration % 60}m
-                  </span>
+                  <span>{formatDuration(selectedMovie.duration)}</span>
                 </div>
-                <p className="text-muted-foreground">{movie.description}</p>
+                <p className="text-muted-foreground">
+                  {selectedMovie.description}
+                </p>
               </CardContent>
             </Card>
           </motion.div>
@@ -267,25 +273,26 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {uniqueDates.map((date) => (
                       <Button
-                        key={date}
-                        variant={selectedDate === date ? "default" : "outline"}
+                        key={date.value}
+                        variant={
+                          selectedDate === date.value ? "default" : "outline"
+                        }
                         onClick={() => {
-                          setSelectedDate(date);
+                          setSelectedDate(date.value);
                           setSelectedTheater("");
                           clearSelectedSeats();
                           setStep("theater");
                         }}
                         className="flex-shrink-0"
                       >
-                        {format(new Date(date), "EEE, MMM d")}
+                        {format(new Date(date.label), "EEE, MMM d")}
                       </Button>
                     ))}
                   </div>
                 </div>
-
                 {/* Theater Selection */}
                 <AnimatePresence mode="wait">
-                  {step === "theater" && selectedDate && (
+                  {(step === "theater" || step === "seats") && selectedDate && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -298,21 +305,29 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                           Select Theater:
                         </span>
                       </div>
-
+                      {!schedules.length && (
+                        <div className="grid gap-4">
+                          <div className="text-center text-muted-foreground">
+                            No theaters available for this date
+                          </div>
+                        </div>
+                      )}
                       <div className="grid gap-4">
-                        {theaters.map((theater) => (
+                        {schedules.map((theater) => (
                           <Button
-                            key={theater.id}
+                            key={theater._id}
                             variant={
-                              selectedTheater === theater.id
+                              selectedTheater === theater._id
                                 ? "default"
                                 : "outline"
                             }
-                            onClick={() => handleTheaterSelect(theater.id)}
+                            onClick={() => handleTheaterSelect(theater._id)}
                             className="justify-start h-auto py-4"
                           >
                             <div className="text-left">
-                              <div className="font-medium">{theater.name}</div>
+                              <div className="font-medium">
+                                {theater?.companyId?.name || ""}
+                              </div>
                               <div className="text-sm opacity-70">
                                 Available seats: Standard, Premium, VIP
                               </div>
@@ -322,9 +337,8 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                       </div>
                     </motion.div>
                   )}
-
                   {/* Seat Selection */}
-                  {step === "seats" && selectedSchedule && (
+                  {step === "seats" && selectedTheater && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -340,7 +354,6 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                   )}
                 </AnimatePresence>
               </CardContent>
-
               {step === "seats" && (
                 <CardFooter>
                   <Button
@@ -357,7 +370,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                         {selectedSeats
                           .reduce(
                             (sum, seat) =>
-                              sum + (seatPrices[seat.seatType] || 0),
+                              sum + (seatPrices[seat.seatName] || 0),
                             0
                           )
                           .toFixed(2)}
