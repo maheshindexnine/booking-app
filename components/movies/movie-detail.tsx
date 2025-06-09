@@ -57,16 +57,13 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
     clearSelectedSeats,
     selectedSeats,
     toggleSeatSelection,
-    getSchedulesForMovie,
     getSeatsForSchedule,
     selectedSchedule,
   } = useMovieStore();
   const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTheater, setSelectedTheater] = useState<string>("");
-  // const [seats, setSeats] = useState<ReturnType<typeof getSeatsForSchedule>>(
-  //   []
-  // );
+  const { bookSeat } = useSeatStore();
   const [seatPrices, setSeatPrices] = useState<Record<string, number>>({});
   const [step, setStep] = useState<"date" | "theater" | "seats">("date");
   const role = user?.type || "user";
@@ -132,25 +129,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
     );
   }
 
-  // Get unique dates from schedules
-  // const uniqueDates = [...new Set(schedules.map((schedule) => schedule.date))];
-
   const uniqueDates = getNextDateItems(5);
-  // Get unique theaters for selected date
-
-  // const theaters = [
-  //   ...new Set(
-  //     schedules
-  //       .filter((schedule) => schedule.date === selectedDate)
-  //       .map((schedule) => schedule.companyId)
-  //   ),
-  // ].map((theaterId) => {
-  //   const schedule = schedules.find((s) => s.companyId === theaterId);
-  //   return {
-  //     id: theaterId,
-  //     name: schedule?.companyName || "Unknown Theater",
-  //   };
-  // });
 
   const handleTheaterSelect = (theaterId: string) => {
     setSelectedTheater(theaterId);
@@ -158,7 +137,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
     setStep("seats");
   };
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -178,11 +157,11 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
     }
 
     try {
-      const booking = createBooking(user.id);
+      await bookSeat({ id: selectedSeats[0]._id, booked: true });
 
       toast({
         title: "Booking Successful!",
-        description: `You've booked ${selectedSeats.length} seats for ${movie.name}`,
+        description: `You've booked ${selectedSeats.length} seats.`,
       });
 
       router.push("/bookings");
@@ -299,12 +278,14 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                       exit={{ opacity: 0, y: -20 }}
                       className="mb-8"
                     >
-                      <div className="flex items-center mb-4">
-                        <Building2 className="mr-2 h-5 w-5 text-muted-foreground" />
-                        <span className="text-sm font-medium">
-                          Select Theater:
-                        </span>
-                      </div>
+                      {schedules.length > 0 && (
+                        <div className="flex items-center mb-4">
+                          <Building2 className="mr-2 h-5 w-5 text-muted-foreground" />
+                          <span className="text-sm font-medium">
+                            Select Theater:
+                          </span>
+                        </div>
+                      )}
                       {!schedules.length && (
                         <div className="grid gap-4">
                           <div className="text-center text-muted-foreground">
@@ -321,7 +302,9 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                                 ? "default"
                                 : "outline"
                             }
-                            onClick={() => handleTheaterSelect(theater._id)}
+                            onClick={() =>
+                              handleTheaterSelect(theater._id || "")
+                            }
                             className="justify-start h-auto py-4"
                           >
                             <div className="text-left">

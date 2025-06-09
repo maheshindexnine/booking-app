@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { Seat } from '@/types';
-import { seatService } from '@/services/seatService';
-import { BookSeatPayload, SeatQueryParams } from '@/services/seatService';
+import { create } from "zustand";
+import { Booking, Seat } from "@/types";
+import { seatService } from "@/services/seatService";
+import { BookSeatPayload, SeatQueryParams } from "@/services/seatService";
 
 // Store
 interface SeatState {
@@ -9,6 +9,7 @@ interface SeatState {
   selectedSeat: Seat | null;
   loading: boolean;
   error: string | null;
+  bookings: Booking[];
 
   // Actions
   getSeats: (params?: SeatQueryParams) => Promise<Seat[]>;
@@ -16,6 +17,7 @@ interface SeatState {
   selectSeat: (seat: Seat) => void;
   clearSelectedSeat: () => void;
   bookSeat: (payload: BookSeatPayload) => Promise<void>;
+  getBookings: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -24,7 +26,7 @@ export const useSeatStore = create<SeatState>((set, get) => ({
   selectedSeat: null,
   loading: false,
   error: null,
-
+  bookings: [],
   // Get all seats
   getSeats: async (params) => {
     try {
@@ -33,14 +35,26 @@ export const useSeatStore = create<SeatState>((set, get) => ({
       set({ seats, loading: false });
       return seats;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch seats';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch seats";
       set({ error: errorMessage, loading: false });
       return get().seats; // Return existing seats if API call fails
     }
   },
 
+  getBookings: async () => {
+    try {
+      const bookings = await seatService.getBookings();
+      set({ bookings, loading: false });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to fetch bookings";
+      set({ error: errorMessage, loading: false });
+    }
+  },
+
   // Get seat by ID
-  getSeatById: (id) => get().seats.find(seat => seat.id === id),
+  getSeatById: (id) => get().seats.find((seat) => seat._id === id),
 
   // Select seat
   selectSeat: (seat) => set({ selectedSeat: seat }),
@@ -49,18 +63,14 @@ export const useSeatStore = create<SeatState>((set, get) => ({
   clearSelectedSeat: () => set({ selectedSeat: null }),
 
   // Book a seat
-  bookSeat: async (payload) => {
+  bookSeat: async (payload: BookSeatPayload) => {
     try {
       set({ loading: true, error: null });
-      const updatedSeat = await seatService.bookSeat(payload);
-      set(state => ({
-        seats: state.seats.map(seat => 
-          seat.id === payload.seatId ? updatedSeat : seat
-        ),
-        loading: false
-      }));
+      await seatService.bookSeat(payload);
+      set({ loading: false, error: null });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to book seat';
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to book seat";
       set({ error: errorMessage, loading: false });
       throw error;
     }
@@ -68,4 +78,4 @@ export const useSeatStore = create<SeatState>((set, get) => ({
 
   // Clear error
   clearError: () => set({ error: null }),
-})); 
+}));

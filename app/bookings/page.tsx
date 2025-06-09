@@ -4,32 +4,34 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { EventSchedule, Movie, Booking, EventSeat } from "@/types";
 import { format, parseISO } from "date-fns";
 import { CalendarDays, Clock, Film, MapPin, Ticket } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useSeatStore } from "@/lib/seats";
 
 export default function BookingsPage() {
   const { user } = useAuth();
-  const { 
-    getBookingsForUser, 
-    getMovieById,
-    schedules,
-    eventSeats
-  } = useMovieStore();
-  
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const role = user?.type || 'user';
+  const { getBookingsForUser, getMovieById, schedules, eventSeats } =
+    useMovieStore();
+
+  // const [bookings, setBookings] = useState<Booking[]>([]);
+  const role = user?.type || "user";
+
+  const { getBookings, bookings } = useSeatStore();
 
   useEffect(() => {
-    if (user) {
-      const userBookings = getBookingsForUser(user.id);
-      setBookings(userBookings);
-    }
-  }, [user, getBookingsForUser]);
+    getBookings();
+  }, []);
 
   if (!user) {
     return (
@@ -46,7 +48,7 @@ export default function BookingsPage() {
 
   // Helper to get movie for a booking
   const getMovieForBooking = (booking: Booking): Movie | undefined => {
-    const schedule = schedules.find(s => s.id === booking.eventScheduleId);
+    const schedule = schedules.find((s) => s.id === booking.eventScheduleId);
     if (schedule) {
       return getMovieById(schedule.eventId);
     }
@@ -54,19 +56,21 @@ export default function BookingsPage() {
   };
 
   // Helper to get schedule for a booking
-  const getScheduleForBooking = (booking: Booking): EventSchedule | undefined => {
-    return schedules.find(s => s.id === booking.eventScheduleId);
+  const getScheduleForBooking = (
+    booking: Booking
+  ): EventSchedule | undefined => {
+    return schedules.find((s) => s.id === booking.eventScheduleId);
   };
 
   // Helper to get seats for a booking
   const getSeatsForBooking = (booking: Booking): EventSeat[] => {
-    return eventSeats.filter(seat => booking.seats.includes(seat.id));
+    return eventSeats.filter((seat) => booking.seats.includes(seat.id));
   };
 
   return (
     <div className="flex min-h-screen flex-col">
       <MainNav role={role} />
-      
+
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
@@ -76,16 +80,15 @@ export default function BookingsPage() {
             View all your movie bookings
           </p>
         </div>
-        
+
         {bookings.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {bookings.map((booking, index) => {
-              const movie = getMovieForBooking(booking);
-              const schedule = getScheduleForBooking(booking);
-              const seats = getSeatsForBooking(booking);
+              const movie = booking.eventId;
+              const schedule = booking.eventScheduleId;
               
               if (!movie || !schedule) return null;
-              
+
               return (
                 <motion.div
                   key={booking.id}
@@ -102,10 +105,12 @@ export default function BookingsPage() {
                       />
                       <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-background/90 to-transparent" />
                       <div className="absolute bottom-4 left-4 right-4">
-                        <h2 className="font-bold text-xl text-white">{movie.name}</h2>
+                        <h2 className="font-bold text-xl text-white">
+                          {movie.name}
+                        </h2>
                         <div className="flex items-center text-xs text-white/80 mt-1">
                           <Ticket className="h-3 w-3 mr-1" />
-                          <span>Booking #{booking.id.substring(0, 8)}</span>
+                          <span>Booking #{booking._id.substring(0, 8)}</span>
                         </div>
                       </div>
                     </div>
@@ -116,25 +121,33 @@ export default function BookingsPage() {
                           <div>
                             <p className="text-sm font-medium">Date & Time</p>
                             <p className="text-sm text-muted-foreground">
-                              {format(new Date(schedule.date), "MMMM d, yyyy")} at {schedule.time}
+                              {format(new Date(booking.updatedAt), "MMMM d, yyyy")}{" "}
                             </p>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-start gap-2">
                           <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                           <div>
                             <p className="text-sm font-medium">Seats</p>
                             <p className="text-sm text-muted-foreground">
-                              {seats.map(seat => `${seat.row}${seat.number} (${seat.seatType})`).join(", ")}
+                              {/* {seats
+                                .map(
+                                  (seat) =>
+                                    `${seat.row}${seat.number} (${seat.seatType})`
+                                )
+                                .join(", ")} */}
+                                {booking.row} - {booking.seatNo}
                             </p>
                           </div>
                         </div>
-                        
+
                         <div className="pt-2 border-t">
                           <div className="flex justify-between">
                             <span className="font-medium">Total Paid:</span>
-                            <span className="font-bold">${booking.totalAmount.toFixed(2)}</span>
+                            <span className="font-bold">
+                              ${booking.price}
+                            </span>
                           </div>
                         </div>
                       </div>

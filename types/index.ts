@@ -93,11 +93,18 @@ export interface EventSeat {
 }
 
 export interface Booking {
-  id: string;
+  _id: string;
+  vendorId: string;
   userId: string;
-  eventScheduleId: string;
-  seats: string[]; // Array of EventSeat IDs
-  totalAmount: number;
-  status: "pending" | "confirmed" | "cancelled";
+  companyId: CompanyId;
+  eventScheduleId: EventSchedule;
+  eventId: Movie;
+  seats?: string[]; // Array of EventSeat IDs
+  seatNo: string;
+  row: string;
+  price: number;
+  booked: boolean;
+  status?: "pending" | "confirmed" | "cancelled";
   createdAt: string;
+  updatedAt: string;
 }
