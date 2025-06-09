@@ -10,10 +10,14 @@ export interface eventScheduleQueryParams {
 
 interface EventScheduleState {
   schedules: EventSchedule[];
+  schedulesByVendor: EventSchedule[];
   selectedSchedule: EventSchedule | null;
   isLoading: boolean;
   error: string | null;
   getSchedules: (params?: eventScheduleQueryParams) => Promise<void>;
+  getEventSchedulesByVendor: (
+    params?: eventScheduleQueryParams
+  ) => Promise<void>;
   getScheduleById: (id: string) => Promise<void>;
   createSchedule: (schedule: Omit<EventSchedule, "id">) => Promise<void>;
   updateSchedule: (
@@ -27,6 +31,7 @@ interface EventScheduleState {
 
 export const useEventScheduleStore = create<EventScheduleState>((set, get) => ({
   schedules: [],
+  schedulesByVendor: [],
   selectedSchedule: null,
   isLoading: false,
   error: null,
@@ -35,8 +40,22 @@ export const useEventScheduleStore = create<EventScheduleState>((set, get) => ({
     try {
       set({ isLoading: true, error: null });
       const schedules = await eventScheduleService.getEventSchedules(params);
-      console.log(schedules, " asdasdasdsadad");
       set({ schedules, isLoading: false });
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error ? error.message : "Failed to fetch schedules",
+        isLoading: false,
+      });
+    }
+  },
+
+  getEventSchedulesByVendor: async (params?: eventScheduleQueryParams) => {
+    try {
+      set({ isLoading: true, error: null });
+      const schedulesByVendor =
+        await eventScheduleService.getEventSchedulesByVendor(params);
+      set({ schedulesByVendor, isLoading: false });
     } catch (error) {
       set({
         error:

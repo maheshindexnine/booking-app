@@ -15,9 +15,7 @@ export const authService = {
     }
   },
 
-  register: async (
-    userData: Omit<User, "id" | "createdAt">
-  ): Promise<{ message: string }> => {
+  register: async (userData: Omit<User, "id" | "createdAt">): Promise<Auth> => {
     try {
       const response = await api.post(`/auth/register`, userData);
       return response.data;

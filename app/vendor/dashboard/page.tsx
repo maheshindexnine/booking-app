@@ -24,12 +24,13 @@ export default function VendorDashboard() {
   const { user } = useAuth();
   const { schedules } = useMovieStore();
   const { getCompanies, companies } = useCompanyStore();
-  const { getSchedules, schedules: schedulesData } = useEventScheduleStore();
+  const { getEventSchedulesByVendor, schedulesByVendor: schedulesData } =
+    useEventScheduleStore();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
   const getCompaniesData = async () => await getCompanies();
-  const getSchedulesData = async () => await getSchedules();
+  const getSchedulesData = async () => await getEventSchedulesByVendor();
 
   useEffect(() => {
     setIsClient(true);

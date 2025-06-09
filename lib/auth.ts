@@ -14,14 +14,14 @@ interface AuthState {
 
 // Initialize state from localStorage if available
 const getInitialState = () => {
-  if (typeof window === 'undefined') return { user: null, token: '' };
-  
-  const storedUser = localStorage.getItem('user');
-  const storedToken = localStorage.getItem('token');
-  
+  if (typeof window === "undefined") return { user: null, token: "" };
+
+  const storedUser = localStorage.getItem("user");
+  const storedToken = localStorage.getItem("token");
+
   return {
     user: storedUser ? JSON.parse(storedUser) : null,
-    token: storedToken || '',
+    token: storedToken || "",
   };
 };
 
@@ -52,16 +52,20 @@ export const useAuth = create<AuthState>((set) => ({
     }
   },
 
-  register: async (userData) => {
+  register: async (userData: Omit<User, "id" | "createdAt">) => {
     set({ isLoading: true, error: null });
 
     try {
-      const response = await authService.register(userData);
-      if (!response?.message) {
+      const user: Auth = await authService.register(userData);
+      if (!user) {
         throw new Error("Failed to register");
       }
 
-      set({ isLoading: false });
+      // add data to localStorage
+      const { access_token } = user;
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", access_token);
+      set({ user, token: access_token, isLoading: false });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : "An error occurred",
@@ -71,8 +75,8 @@ export const useAuth = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     set({ user: null, token: "" });
   },
 }));

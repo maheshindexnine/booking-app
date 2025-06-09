@@ -28,6 +28,17 @@ export const eventScheduleService = {
     }
   },
 
+  getEventSchedulesByVendor: async (
+    params?: eventScheduleQueryParams
+  ): Promise<EventSchedule[]> => {
+    try {
+      const response = await api.get("/event-schedules/vendor", { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // Get event schedule by ID
   getEventScheduleById: async (id: string): Promise<EventSchedule> => {
     try {
