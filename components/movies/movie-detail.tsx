@@ -76,7 +76,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   };
 
   const getTheaterLists = async () => {
-    await getSchedules();
+    await getSchedules({ date: selectedDate });
   };
 
   const getSeatLists = async () => {

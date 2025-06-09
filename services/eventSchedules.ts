@@ -1,6 +1,7 @@
 import { EventSchedule } from "@/types";
 
 import api from "./api";
+import { eventScheduleQueryParams } from "@/lib/eventSchedules";
 
 export const eventScheduleService = {
   // Create a new event schedule
@@ -16,9 +17,11 @@ export const eventScheduleService = {
   },
 
   // Get all event schedules
-  getEventSchedules: async (): Promise<EventSchedule[]> => {
+  getEventSchedules: async (
+    params?: eventScheduleQueryParams
+  ): Promise<EventSchedule[]> => {
     try {
-      const response = await api.get("/event-schedules");
+      const response = await api.get("/event-schedules", { params });
       return response.data;
     } catch (error) {
       throw error;
