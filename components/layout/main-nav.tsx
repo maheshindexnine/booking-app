@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Film, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,32 +17,33 @@ interface MainNavProps {
 
 export function MainNav({ role }: MainNavProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/";
+    router.push("/");
   };
 
   let navItems = [];
 
-  if (role === 'admin') {
+  if (role === "admin") {
     navItems = [
-      { href: '/admin/dashboard', label: 'Dashboard' },
-      { href: '/admin/users', label: 'Users' },
-      { href: '/admin/movies', label: 'Movies' },
+      { href: "/admin/dashboard", label: "Dashboard" },
+      { href: "/admin/users", label: "Users" },
+      { href: "/admin/movies", label: "Movies" },
     ];
-  } else if (role === 'vendor') {
+  } else if (role === "vendor") {
     navItems = [
-      { href: '/vendor/dashboard', label: 'Dashboard' },
-      { href: '/vendor/company', label: 'Company' },
-      { href: '/vendor/schedule', label: 'Schedules' },
+      { href: "/vendor/dashboard", label: "Dashboard" },
+      { href: "/vendor/company", label: "Company" },
+      { href: "/vendor/schedule", label: "Schedules" },
     ];
   } else {
     navItems = [
-      { href: '/movies', label: 'Movies' },
-      { href: '/bookings', label: 'My Bookings' },
+      { href: "/movies", label: "Movies" },
+      { href: "/bookings", label: "My Bookings" },
     ];
   }
 
@@ -50,7 +51,10 @@ export function MainNav({ role }: MainNavProps) {
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
       <div className="px-4 md:mx-32 flex h-16 items-center justify-between">
         <div className="flex gap-6 md:gap-10">
-          <Link href={getRedirectPath(role)} className="flex items-center space-x-2">
+          <Link
+            href={getRedirectPath(role)}
+            className="flex items-center space-x-2"
+          >
             <Film className="h-6 w-6 text-primary" />
             <span className="font-bold inline-block">CinemaSeats</span>
           </Link>
@@ -61,7 +65,9 @@ export function MainNav({ role }: MainNavProps) {
                 href={item.href}
                 className={cn(
                   "flex items-center text-sm font-medium transition-colors hover:text-foreground/80",
-                  pathname === item.href ? "text-foreground" : "text-foreground/60"
+                  pathname === item.href
+                    ? "text-foreground"
+                    : "text-foreground/60"
                 )}
               >
                 {item.label}
@@ -72,13 +78,28 @@ export function MainNav({ role }: MainNavProps) {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <div className="hidden md:flex">
-            <Button 
-              variant="ghost" 
-              onClick={handleLogout}
-              className="text-base font-normal"
-            >
-              Sign Out
-            </Button>
+            {user ? (
+              <Button
+                variant="ghost"
+                onClick={handleLogout}
+                className="text-base font-normal"
+              >
+                Logout
+              </Button>
+            ) : (
+              <div className="space-x-5">
+                <Link href="/login">
+                  <Button variant="default" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button variant="outline" size="sm">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="md:hidden">
@@ -105,14 +126,16 @@ export function MainNav({ role }: MainNavProps) {
                       onClick={() => setIsOpen(false)}
                       className={cn(
                         "text-base transition-colors hover:text-foreground/80",
-                        pathname === item.href ? "text-foreground font-medium" : "text-foreground/60"
+                        pathname === item.href
+                          ? "text-foreground font-medium"
+                          : "text-foreground/60"
                       )}
                     >
                       {item.label}
                     </Link>
                   ))}
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     onClick={() => {
                       handleLogout();
                       setIsOpen(false);

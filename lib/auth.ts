@@ -12,9 +12,21 @@ interface AuthState {
   logout: () => void;
 }
 
+// Initialize state from localStorage if available
+const getInitialState = () => {
+  if (typeof window === 'undefined') return { user: null, token: '' };
+  
+  const storedUser = localStorage.getItem('user');
+  const storedToken = localStorage.getItem('token');
+  
+  return {
+    user: storedUser ? JSON.parse(storedUser) : null,
+    token: storedToken || '',
+  };
+};
+
 export const useAuth = create<AuthState>((set) => ({
-  user: null,
-  token: "",
+  ...getInitialState(),
   isLoading: false,
   error: null,
   login: async (email: string, password: string) => {
@@ -59,7 +71,8 @@ export const useAuth = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    sessionStorage.clear();
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     set({ user: null, token: "" });
   },
 }));
