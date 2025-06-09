@@ -1,5 +1,13 @@
 export type UserRole = "admin" | "vendor" | "user";
 
+export interface Auth {
+  userId: string;
+  access_token: string;
+  role: string;
+  name: string;
+  email: string;
+}
+
 export interface User {
   id: string;
   name: string;
