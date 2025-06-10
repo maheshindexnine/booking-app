@@ -46,16 +46,19 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="max-4 px-4 md:mx-32 pt-16 md:pt-24 lg:pt-32">
-        <div className="flex flex-col items-center text-center">
-          <h1 className="text-xl md:text-4xl font-bold tracking-tight sm:text-5xl lg:text-7xl">
+      <section className="relative bg-[url('/images/bg.jpg')] rounded-xl bg-cover bg-center bg-no-repeat px-4 md:mx-32 pt-16 md:pt-24 lg:pt-32">
+        {/* Overlay for dimming */}
+        <div className="absolute inset-0 bg-black opacity-30 pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col items-center text-center opacity-50">
+          <h1 className="text-xl md:text-4xl font-bold tracking-tight sm:text-5xl lg:text-7xl text-white">
             Book your perfect movie experience
           </h1>
-          <p className="mt-6 max-w-3xl text-xs md:text-lg text-muted-foreground">
+          <p className="mt-6 max-w-3xl text-xs md:text-lg text-muted-foreground text-neutral-200">
             Find the best seats, at the best theaters, for all your favorite
             movies. Simple booking, amazing experience.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4 justify-center">
+          <div className="my-10 flex flex-wrap gap-4 justify-center">
             <Link href="/movies">
               <Button size="lg" className="rounded-full px-8">
                 Browse Movies
@@ -71,7 +74,7 @@ export default function Home() {
       </section>
 
       {/* Now Showing Section */}
-      <section className="px-4 md:mx-32 mx-auto px-4 py-24">
+      <section className="px-4 md:mx-32 mx-auto py-10">
         <h2 className="text-3xl font-bold tracking-tight mb-8">Now Showing</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {movies.map((movie, index) => (
