@@ -34,7 +34,7 @@ function useChart() {
   return context;
 }
 
-const Chartpx-4 md:mx-32 = React.forwardRef<
+const Chart = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'> & {
     config: ChartConfig;
@@ -65,7 +65,7 @@ const Chartpx-4 md:mx-32 = React.forwardRef<
     </ChartContext.Provider>
   );
 });
-ChartContainer.displayName = 'Chart';
+Chart.displayName = 'Chart';
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
@@ -356,7 +356,7 @@ function getPayloadConfigFromPayload(
 }
 
 export {
-  ChartContainer,
+  Chart,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,

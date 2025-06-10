@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useMovieStore } from "@/lib/movies";
-import { Movie } from "@/types";
+import { Movie, UserRole } from "@/types";
 import { MainNav } from "@/components/layout/main-nav";
 import { useAuth } from "@/lib/auth";
 import { MovieCard } from "@/components/movies/movie-card";
@@ -26,7 +26,7 @@ export default function MoviesPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <MainNav role={role} />
+      <MainNav role={role as UserRole} />
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">

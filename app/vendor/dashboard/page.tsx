@@ -22,7 +22,6 @@ import moment from "moment";
 
 export default function VendorDashboard() {
   const { user } = useAuth();
-  const { schedules } = useMovieStore();
   const { getCompanies, companies } = useCompanyStore();
   const { getEventSchedulesByVendor, schedulesByVendor: schedulesData } =
     useEventScheduleStore();
@@ -31,6 +30,7 @@ export default function VendorDashboard() {
 
   const getCompaniesData = async () => await getCompanies();
   const getSchedulesData = async () => await getEventSchedulesByVendor();
+  const { schedules } = useEventScheduleStore();
 
   useEffect(() => {
     setIsClient(true);
@@ -48,11 +48,6 @@ export default function VendorDashboard() {
   if (!isClient || !user || user.type !== "vendor") {
     return null; // Don't render anything while checking auth
   }
-
-  // Get schedules for this vendor
-  const vendorSchedules = schedules.filter(
-    (schedule) => schedule.userId === user.id
-  );
 
   // Mock values for stats
   const totalCustomers = 45;
@@ -112,9 +107,7 @@ export default function VendorDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {vendorSchedules.length}
-                </div>
+                <div className="text-2xl font-bold">{schedules.length}</div>
               </CardContent>
             </Card>
           </motion.div>
@@ -182,7 +175,7 @@ export default function VendorDashboard() {
                         <p className="font-medium">{company.name}</p>
                         <p className="text-xs text-muted-foreground">
                           {company.seats.reduce(
-                            (total, seat) => total + seat.capacity,
+                            (total, seat) => total + seat.seatNo,
                             0
                           )}{" "}
                           total seats
@@ -270,11 +263,11 @@ export default function VendorDashboard() {
               )}
               <div className="mt-4">
                 <Button
-                  variant={vendorSchedules.length > 0 ? "outline" : "default"}
+                  variant={schedules.length > 0 ? "outline" : "default"}
                   className="w-full"
                   onClick={() => router.push("/vendor/schedule")}
                 >
-                  {vendorSchedules.length > 0
+                  {schedules.length > 0
                     ? "Schedule More Shows"
                     : "Create Your First Schedule"}
                 </Button>

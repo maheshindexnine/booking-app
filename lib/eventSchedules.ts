@@ -107,10 +107,10 @@ export const useEventScheduleStore = create<EventScheduleState>((set, get) => ({
       );
       set((state) => ({
         schedules: state.schedules.map((s) =>
-          s.id === id ? updatedSchedule : s
+          s._id === id ? updatedSchedule : s
         ),
         selectedSchedule:
-          state.selectedSchedule?.id === id
+          state.selectedSchedule?._id === id
             ? updatedSchedule
             : state.selectedSchedule,
         isLoading: false,
@@ -129,9 +129,9 @@ export const useEventScheduleStore = create<EventScheduleState>((set, get) => ({
       set({ isLoading: true, error: null });
       await eventScheduleService.deleteEventSchedule(id);
       set((state) => ({
-        schedules: state.schedules.filter((s) => s.id !== id),
+        schedules: state.schedules.filter((s) => s._id !== id),
         selectedSchedule:
-          state.selectedSchedule?.id === id ? null : state.selectedSchedule,
+          state.selectedSchedule?._id === id ? null : state.selectedSchedule,
         isLoading: false,
       }));
     } catch (error) {

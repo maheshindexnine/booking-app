@@ -36,4 +36,27 @@ export const movieService = {
       throw error;
     }
   },
+
+  updateMovieById: async (
+    id: string,
+    movieData: Partial<Movie>
+  ): Promise<Movie> => {
+    try {
+      const response = await api.put(`/event/${id}`, movieData);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating movie:", error);
+      throw error;
+    }
+  },
+
+  deleteMovieById: async (id: string): Promise<Movie> => {
+    try {
+      const response = await api.delete(`/event/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting movie:", error);
+      throw error;
+    }
+  },
 };

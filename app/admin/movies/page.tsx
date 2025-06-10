@@ -27,6 +27,7 @@ import { Film, Plus, Trash, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { Movie } from "@/types";
 
 export default function MoviesPage() {
   const { user } = useAuth();
@@ -76,7 +77,7 @@ export default function MoviesPage() {
         genre: formData.genre.split(",").map((g) => g.trim()),
         duration: parseInt(formData.duration),
         image: formData.image,
-        userId: user.id,
+        userId: user.userId,
       };
 
       if (editingMovie) {
@@ -86,7 +87,7 @@ export default function MoviesPage() {
           description: "The movie has been updated successfully.",
         });
       } else {
-        addMovie(movieData);
+        addMovie(movieData as Omit<Movie, "id" | "createdAt">);
         toast({
           title: "Movie Added",
           description: "The new movie has been added successfully.",
@@ -286,7 +287,7 @@ export default function MoviesPage() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => handleDelete(movie.id)}
+                      onClick={() => handleDelete(movie._id)}
                     >
                       <Trash className="h-4 w-4 mr-1" />
                       Delete

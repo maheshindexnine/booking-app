@@ -66,7 +66,7 @@ export function AuthForm() {
           title: "Login successful",
           description: `Welcome back, ${user.name}!`,
         });
-        router.push(getRedirectPath(user.type));
+        router.push(getRedirectPath(user.type as UserRole));
       }
     } catch (error) {
       console.error("Login error:", error);

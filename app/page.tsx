@@ -2,14 +2,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { CalendarClock, Film, TrendingUp, Users } from "lucide-react";
-import { MovieCard } from "@/components/movies/movie-card";
-import { mockMovies, useMovieStore } from "@/lib/movies";
+import { CalendarClock, Film, TrendingUp } from "lucide-react";
+import { useMovieStore } from "@/lib/movies";
 import MovieCardNew from "@/components/movies/movie-card-new";
 import { useEffect } from "react";
 
 export default function Home() {
-  const featuredMovies = mockMovies.slice(0, 4);
   const { movies, getMovies } = useMovieStore();
 
   const fetchMovies = async () => {

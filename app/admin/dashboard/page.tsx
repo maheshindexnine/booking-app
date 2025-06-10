@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
-  const { movies, schedules, bookings } = useMovieStore();
+  const { movies } = useMovieStore();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
   
@@ -33,8 +33,8 @@ export default function AdminDashboard() {
 
   const totalUsers = 3; // Mock user count for demo
   const totalMovies = movies.length;
-  const totalSchedules = schedules.length;
-  const totalBookings = bookings.length;
+  const totalSchedules = 5;
+  const totalBookings = 6;
 
   const statCards = [
     { title: "Total Users", value: totalUsers, icon: Users, color: "bg-blue-500" },

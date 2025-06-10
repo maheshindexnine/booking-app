@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EventSchedule, Movie, Booking, EventSeat } from "@/types";
+import { EventSchedule, Movie, Booking, EventSeat, UserRole } from "@/types";
 import { format, parseISO } from "date-fns";
 import { CalendarDays, Clock, Film, MapPin, Ticket } from "lucide-react";
 import { motion } from "framer-motion";
@@ -21,8 +21,6 @@ import { useSeatStore } from "@/lib/seats";
 
 export default function BookingsPage() {
   const { user } = useAuth();
-  const { getBookingsForUser, getMovieById, schedules, eventSeats } =
-    useMovieStore();
 
   // const [bookings, setBookings] = useState<Booking[]>([]);
   const role = user?.type || "user";
@@ -46,30 +44,9 @@ export default function BookingsPage() {
     );
   }
 
-  // Helper to get movie for a booking
-  const getMovieForBooking = (booking: Booking): Movie | undefined => {
-    const schedule = schedules.find((s) => s.id === booking.eventScheduleId);
-    if (schedule) {
-      return getMovieById(schedule.eventId);
-    }
-    return undefined;
-  };
-
-  // Helper to get schedule for a booking
-  const getScheduleForBooking = (
-    booking: Booking
-  ): EventSchedule | undefined => {
-    return schedules.find((s) => s.id === booking.eventScheduleId);
-  };
-
-  // Helper to get seats for a booking
-  const getSeatsForBooking = (booking: Booking): EventSeat[] => {
-    return eventSeats.filter((seat) => booking.seats.includes(seat.id));
-  };
-
   return (
     <div className="flex min-h-screen flex-col">
-      <MainNav role={role} />
+      <MainNav role={role as UserRole} />
 
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
@@ -86,12 +63,12 @@ export default function BookingsPage() {
             {bookings.map((booking, index) => {
               const movie = booking.eventId;
               const schedule = booking.eventScheduleId;
-              
+
               if (!movie || !schedule) return null;
 
               return (
                 <motion.div
-                  key={booking.id}
+                  key={booking._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -121,7 +98,10 @@ export default function BookingsPage() {
                           <div>
                             <p className="text-sm font-medium">Date & Time</p>
                             <p className="text-sm text-muted-foreground">
-                              {format(new Date(booking.updatedAt), "MMMM d, yyyy")}{" "}
+                              {format(
+                                new Date(booking.updatedAt),
+                                "MMMM d, yyyy"
+                              )}{" "}
                             </p>
                           </div>
                         </div>
@@ -137,7 +117,7 @@ export default function BookingsPage() {
                                     `${seat.row}${seat.number} (${seat.seatType})`
                                 )
                                 .join(", ")} */}
-                                {booking.row} - {booking.seatNo}
+                              {booking.row} - {booking.seatNo}
                             </p>
                           </div>
                         </div>
@@ -145,9 +125,7 @@ export default function BookingsPage() {
                         <div className="pt-2 border-t">
                           <div className="flex justify-between">
                             <span className="font-medium">Total Paid:</span>
-                            <span className="font-bold">
-                              ${booking.price}
-                            </span>
+                            <span className="font-bold">${booking.price}</span>
                           </div>
                         </div>
                       </div>

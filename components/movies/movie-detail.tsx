@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
 import { useMovieStore } from "@/lib/movies";
 import { useAuth } from "@/lib/auth";
 import { MainNav } from "@/components/layout/main-nav";
@@ -15,19 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import {
   ChevronLeft,
-  Clock,
-  Film,
   CalendarDays,
   Building2,
   TicketCheck,
@@ -38,10 +27,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useEventScheduleStore } from "@/lib/eventSchedules";
-import Image from "next/image";
-import { formatDuration, getNextDateItems } from "@/utils/common";
+import { getNextDateItems } from "@/utils/common";
 import { useSeatStore } from "@/lib/seats";
 import MovieCardNew from "./movie-card-new";
+import { UserRole } from "@/types";
 
 interface MovieDetailProps {
   movieId: string;
@@ -52,15 +41,8 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   const { toast } = useToast();
   const { getSchedules, schedules } = useEventScheduleStore();
   const { getSeats, seats } = useSeatStore();
-  const {
-    getMovieById,
-    selectedMovie,
-    clearSelectedSeats,
-    selectedSeats,
-    toggleSeatSelection,
-    getSeatsForSchedule,
-    selectedSchedule,
-  } = useMovieStore();
+  const { getMovieById, selectedMovie, selectedSeats, toggleSeatSelection } =
+    useMovieStore();
   const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTheater, setSelectedTheater] = useState<string>("");
@@ -92,20 +74,6 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (selectedSchedule) {
-      const scheduleSeats = getSeatsForSchedule(selectedSchedule.id);
-      // setSeats(scheduleSeats);
-
-      // Set seat prices based on the selected schedule
-      const priceMap: Record<string, number> = {};
-      selectedSchedule.seatTypes.forEach((seatType) => {
-        priceMap[seatType.name] = seatType.price;
-      });
-      setSeatPrices(priceMap);
-    }
-  }, [selectedSchedule, getSeatsForSchedule]);
-
-  useEffect(() => {
     if (selectedTheater) {
       getSeatLists();
     }
@@ -114,7 +82,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   if (!selectedMovie) {
     return (
       <div className="flex min-h-screen flex-col">
-        <MainNav role={role} />
+        <MainNav role={role as UserRole} />
         <div className="px-4 md:mx-32 py-8">
           <div className="max-w-md mx-auto text-center">
             <h1 className="text-2xl font-bold mb-4">Movie Not Found</h1>
@@ -134,7 +102,6 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
 
   const handleTheaterSelect = (theaterId: string) => {
     setSelectedTheater(theaterId);
-    clearSelectedSeats();
     setStep("seats");
   };
 
@@ -225,7 +192,6 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                         onClick={() => {
                           setSelectedDate(date.value);
                           setSelectedTheater("");
-                          clearSelectedSeats();
                           setStep("theater");
                         }}
                         className="flex-shrink-0"

@@ -1,9 +1,11 @@
 export type UserRole = "admin" | "vendor" | "user";
 
 export interface Auth {
+  _id?: string;
   userId: string;
   access_token: string;
-  role: string;
+  role?: string;
+  type?: string;
   name: string;
   email: string;
 }
@@ -40,6 +42,8 @@ export interface Company {
 }
 
 export interface Seat {
+  capacity: any;
+  name: any;
   // id: string;
   // eventId: string;
   // seatNumber: string;
@@ -76,8 +80,8 @@ export interface EventId {
 export interface EventSchedule {
   _id?: string;
   userId: string;
-  companyId?: CompanyId | string;
-  eventId?: Movie | string;
+  companyId?: CompanyId | string | any;
+  eventId?: Movie | string | any;
   date: string;
   seatTypes: SeatType[];
   createdAt?: string;

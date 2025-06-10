@@ -34,8 +34,7 @@ export default function SchedulePage() {
   const { user } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
-  const { getCompaniesByUserId, getMovies, schedules, movies } =
-    useMovieStore();
+  const { getMovies, movies } = useMovieStore();
   const { createSchedule } = useEventScheduleStore();
   const { getCompanies, companies, getCompanyById } = useCompanyStore();
   const { schedules: schedulesData } = useEventScheduleStore();
@@ -95,18 +94,6 @@ export default function SchedulePage() {
     return null;
   }
 
-  const vendorSchedules = schedules.filter(
-    (schedule) => schedule.userId === user.id
-  );
-
-  const handleAddSeatType = () => {
-    setSeatTypes([...seatTypes, { name: "", price: 0, capacity: 0 }]);
-  };
-
-  const handleRemoveSeatType = (index: number) => {
-    setSeatTypes(seatTypes.filter((_, i) => i !== index));
-  };
-
   const handleSeatTypeChange = (
     index: number,
     field: string,
@@ -132,7 +119,7 @@ export default function SchedulePage() {
 
     try {
       createSchedule({
-        userId: user.id,
+        userId: user._id || "",
         companyId: selectedCompany,
         eventId: selectedMovie,
         date,

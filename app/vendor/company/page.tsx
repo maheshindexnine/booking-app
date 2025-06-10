@@ -19,6 +19,7 @@ import { Building2, Plus, Trash } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useCompanyStore } from "@/lib/companies";
+import { UserRole } from "@/types";
 
 export default function CompanyPage() {
   const { user } = useAuth();
@@ -49,12 +50,12 @@ export default function CompanyPage() {
 
   useEffect(() => {
     console.log(companyId, " eeffef asd kas");
-    
+
     if (companyId) {
       const company = getCompanyByIdFromCompanyStore(companyId);
       if (company) {
         setCompanyName(company.name);
-        setSeats(company.seats);
+        setSeats(company.seats as any);
       }
     }
   }, [companyId, getCompanyByIdFromCompanyStore]);
@@ -113,8 +114,10 @@ export default function CompanyPage() {
     try {
       if (companyId) {
         updateCompanyToCompanyStore(companyId, {
+          _id: companyId,
+          userId: user.userId,
           name: companyName,
-          seats,
+          seats: seats as any,
         });
         toast({
           title: "Success",
@@ -122,8 +125,10 @@ export default function CompanyPage() {
         });
       } else {
         addCompanyToCompanyStore({
+          _id: "",
+          userId: user.userId,
           name: companyName,
-          seats,
+          seats: seats as any,
         });
         toast({
           title: "Success",
@@ -142,7 +147,7 @@ export default function CompanyPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <MainNav role="vendor" />
+      <MainNav role={user.type as UserRole} />
 
       <div className="px-4 md:mx-32 py-8">
         <div className="mb-8">
