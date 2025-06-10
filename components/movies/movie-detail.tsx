@@ -41,6 +41,7 @@ import { useEventScheduleStore } from "@/lib/eventSchedules";
 import Image from "next/image";
 import { formatDuration, getNextDateItems } from "@/utils/common";
 import { useSeatStore } from "@/lib/seats";
+import MovieCardNew from "./movie-card-new";
 
 interface MovieDetailProps {
   movieId: string;
@@ -191,42 +192,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
         </Link>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Movie Details */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-1"
-          >
-            <Card className="overflow-hidden h-full bg-card/60 backdrop-blur-sm border-2 border-border/50 shadow-lg">
-              <div className="relative aspect-[2/3]">
-                <img
-                  src={selectedMovie.image}
-                  alt={selectedMovie.name}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              <CardContent className="p-6">
-                <h1 className="text-3xl font-bold mb-3">
-                  {selectedMovie.name}
-                </h1>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {selectedMovie.genre.map((genre, i) => (
-                    <Badge key={i} variant="secondary">
-                      {genre}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4 mr-1" />
-                  <span>{formatDuration(selectedMovie.duration)}</span>
-                </div>
-                <p className="text-muted-foreground">
-                  {selectedMovie.description}
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
+          <MovieCardNew movie={selectedMovie} showBtn={false} />
 
           {/* Booking Steps */}
           <motion.div

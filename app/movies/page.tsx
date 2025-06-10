@@ -7,6 +7,7 @@ import { MainNav } from "@/components/layout/main-nav";
 import { useAuth } from "@/lib/auth";
 import { MovieCard } from "@/components/movies/movie-card";
 import { MovieFilter } from "@/components/movies/movie-filter";
+import MovieCardNew from "@/components/movies/movie-card-new";
 
 export default function MoviesPage() {
   const { getMovies } = useMovieStore();
@@ -38,9 +39,10 @@ export default function MoviesPage() {
 
         <MovieFilter movies={moviesData} onFilter={handleFilter} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {moviesData.map((movie, index) => (
-            <MovieCard key={movie._id} movie={movie} featured={index === 0} />
+            // <MovieCard key={movie._id} movie={movie} featured={index === 0} />
+            <MovieCardNew key={movie._id} movie={movie} />
           ))}
         </div>
 

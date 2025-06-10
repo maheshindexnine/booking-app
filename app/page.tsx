@@ -1,12 +1,24 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { CalendarClock, Film, TrendingUp, Users } from "lucide-react";
 import { MovieCard } from "@/components/movies/movie-card";
-import { mockMovies } from "@/lib/movies";
+import { mockMovies, useMovieStore } from "@/lib/movies";
+import MovieCardNew from "@/components/movies/movie-card-new";
+import { useEffect } from "react";
 
 export default function Home() {
   const featuredMovies = mockMovies.slice(0, 4);
+  const { movies, getMovies } = useMovieStore();
+
+  const fetchMovies = async () => {
+    await getMovies();
+  };
+
+  useEffect(() => {
+    fetchMovies();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
@@ -61,9 +73,10 @@ export default function Home() {
       {/* Now Showing Section */}
       <section className="px-4 md:mx-32 mx-auto px-4 py-24">
         <h2 className="text-3xl font-bold tracking-tight mb-8">Now Showing</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredMovies.map((movie, index) => (
-            <MovieCard key={movie.id} movie={movie} featured={index === 0} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {movies.map((movie, index) => (
+            // <MovieCard key={movie.id} movie={movie} featured={index === 0} />
+            <MovieCardNew key={movie.id} movie={movie} />
           ))}
         </div>
         <div className="mt-12 text-center">
