@@ -26,8 +26,8 @@ const MovieCardNew = ({
   movie: Movie;
   showBtn?: boolean;
 }) => {
-  const genres = useState(movie.genre.slice(0, 2));
   const router = useRouter();
+  const [genres] = useState<string[]>(movie.genre.slice(0, 2));
 
   const genreStyles = useMemo(
     () =>
@@ -35,7 +35,7 @@ const MovieCardNew = ({
         label: genre,
         hoverClass: getRandomHoverColor(),
       })),
-    []
+    [genres]
   );
   return (
     <motion.div
@@ -83,7 +83,7 @@ const MovieCardNew = ({
                 key={idx}
                 whileHover={{ scale: 1.5 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`text-xs text-neutral-700 dark:text-neutral-400 border-2 dark:border-neutral-400 border-black rounded-2xl px-2 py-0 cursor-pointer capitalize  hover:scale-125 hover:text-white hover:py:1 ${hoverClass}`}
+                className={`text-xs text-neutral-700 dark:text-neutral-400 border-2 dark:border-neutral-400 border-black rounded-2xl px-2 py-0 cursor-pointer capitalize hover:scale-125 hover:text-white ${hoverClass}`}
               >
                 {label}
               </motion.p>

@@ -51,6 +51,12 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   const [step, setStep] = useState<"date" | "theater" | "seats">("date");
   const role = user?.type || "user";
 
+  // Convert Seat[] to EventSeat[]
+  const eventSeats = seats.map(seat => ({
+    ...seat,
+    row: seat.row || "A" // Provide default value for optional row
+  }));
+
   const getMovieDetails = async () => {
     await getMovieById(movieId);
   };
@@ -147,7 +153,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <MainNav role={role} />
+      <MainNav role={role as UserRole} />
 
       <div className="px-4 md:mx-32 py-8">
         <Link
@@ -260,7 +266,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                       exit={{ opacity: 0, y: -20 }}
                     >
                       <SeatSelector
-                        seats={seats}
+                        seats={eventSeats}
                         selectedSeats={selectedSeats}
                         onSelectSeat={toggleSeatSelection}
                         seatPrices={seatPrices}

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth";
-import { useMovieStore } from "@/lib/movies";
 import { MainNav } from "@/components/layout/main-nav";
 import {
   Card,
@@ -28,8 +27,6 @@ export default function CompanyPage() {
   const { toast } = useToast();
   const companyId = searchParams.get("id");
 
-  const { getCompanyById, getCompaniesByUserId, addCompany, updateCompany } =
-    useMovieStore();
   const {
     addCompany: addCompanyToCompanyStore,
     updateCompany: updateCompanyToCompanyStore,

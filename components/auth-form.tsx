@@ -9,8 +9,22 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth, getRedirectPath } from "@/lib/auth";
 import { UserRole } from "@/types";
@@ -18,14 +32,20 @@ import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
 });
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  phone: z.string().min(10, { message: "Phone must be at least 10 characters" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone must be at least 10 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
   type: z.enum(["admin", "vendor", "user"] as const),
 });
 
@@ -82,7 +102,7 @@ export function AuthForm() {
           title: "Registration successful",
           description: `Welcome, ${user.name}!`,
         });
-        router.push(getRedirectPath(user.type));
+        router.push(getRedirectPath(user.type as UserRole));
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -100,11 +120,16 @@ export function AuthForm() {
           <TabsContent value="login">
             <CardHeader>
               <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-              <CardDescription>Enter your email and password to access your account</CardDescription>
+              <CardDescription>
+                Enter your email and password to access your account
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...loginForm}>
-                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+                <form
+                  onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+                  className="space-y-4"
+                >
                   <FormField
                     control={loginForm.control}
                     name="email"
@@ -125,7 +150,11 @@ export function AuthForm() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="******" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="******"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -141,7 +170,7 @@ export function AuthForm() {
             <CardFooter className="flex flex-col space-y-2">
               <div className="text-sm text-muted-foreground">
                 Don't have an account?{" "}
-                <button 
+                <button
                   onClick={() => setActiveTab("register")}
                   className="text-primary underline underline-offset-4 hover:text-primary/80"
                 >
@@ -152,12 +181,19 @@ export function AuthForm() {
           </TabsContent>
           <TabsContent value="register">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-              <CardDescription>Enter your details to create a new account</CardDescription>
+              <CardTitle className="text-2xl font-bold">
+                Create Account
+              </CardTitle>
+              <CardDescription>
+                Enter your details to create a new account
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...registerForm}>
-                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
+                <form
+                  onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
+                  className="space-y-4"
+                >
                   <FormField
                     control={registerForm.control}
                     name="name"
@@ -204,7 +240,11 @@ export function AuthForm() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="******" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="******"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -262,7 +302,7 @@ export function AuthForm() {
             <CardFooter className="flex flex-col space-y-2">
               <div className="text-sm text-muted-foreground">
                 Already have an account?{" "}
-                <button 
+                <button
                   onClick={() => setActiveTab("login")}
                   className="text-primary underline underline-offset-4 hover:text-primary/80"
                 >
