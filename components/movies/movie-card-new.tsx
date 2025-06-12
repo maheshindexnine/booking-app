@@ -50,7 +50,7 @@ const MovieCardNew = ({
         className="opacity-1 w-full h-full
            shadow-2xl rounded-lg rounded-br-[100px]"
       />
-      <div className="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-neutral-500 to-transparent rounded-br-[100px] rounded-lg pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-neutral-800 to-transparent rounded-br-[100px] rounded-lg pointer-events-none" />
       <div className="absolute bottom-0 left-0 flex justify-between w-full p-3">
         <div className="w-3/4 space-y-2">
           <div className="flex justify-between">
@@ -59,7 +59,7 @@ const MovieCardNew = ({
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
-                className="text-lg font-semibold"
+                className="text-lg font-semibold text-white"
               >
                 {movie.name}
               </motion.span>
@@ -67,14 +67,14 @@ const MovieCardNew = ({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
-                className="text-xs text-neutral-700 dark:text-neutral-400"
+                className="text-xs text-neutral-300"
               >
                 {Math.floor(movie.duration / 60)}h {movie.duration % 60}m
               </motion.span>
             </div>
-            <span className="text-xs text-neutral-700 dark:text-neutral-400 flex items-center gap-1">
+            <span className="text-xs text-neutral-700 flex items-center gap-1">
               <Star className="w-5 h-5 text-yellow-300" />
-              <span className="font-semibold">{movie.rating}</span>
+              <span className="font-semibold text-neutral-300 text-md">{movie.rating}</span>
             </span>
           </div>
           <div className="flex gap-2">
@@ -83,7 +83,7 @@ const MovieCardNew = ({
                 key={idx}
                 whileHover={{ scale: 1.5 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`text-xs text-neutral-700 dark:text-neutral-400 border-2 dark:border-neutral-400 border-black rounded-2xl px-2 py-0 cursor-pointer capitalize hover:scale-125 hover:text-white ${hoverClass}`}
+                className={`text-xs text-neutral-300  border-2 border-neutral-700 rounded-2xl px-2 py-0 cursor-pointer capitalize hover:scale-125 hover:text-white ${hoverClass}`}
               >
                 {label}
               </motion.p>
@@ -93,7 +93,7 @@ const MovieCardNew = ({
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1 }}
-            className="text-xs font-thin text-neutral-700 dark:text-neutral-400"
+            className="text-xs font-thin text-neutral-300"
           >
             {movie.description}
           </motion.p>
