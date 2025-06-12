@@ -92,6 +92,7 @@ export interface SeatType {
   name: string;
   price: number;
   capacity: number;
+  color: string;
 }
 
 export interface EventSeat {

@@ -36,19 +36,39 @@ export function SeatSelector({
   const [scale, setScale] = useState(1);
 
   // Group seats by type and row
-  const seatsByType = seats.reduce<Record<string, Record<string, EventSeat[]>>>(
-    (acc, seat) => {
-      if (!acc[seat.seatName]) {
-        acc[seat.seatName] = {};
-      }
-      if (!acc[seat.seatName][seat.row]) {
-        acc[seat.seatName][seat.row] = [];
-      }
-      acc[seat.seatName][seat.row].push(seat);
-      return acc;
-    },
-    {}
-  );
+  // const seatsByType = seats.reduce<Record<string, Record<string, EventSeat[]>>>(
+  //   (acc, seat) => {
+  //     if (!acc[seat.seatName]) {
+  //       acc[seat.seatName] = {};
+  //     }
+  //     if (!acc[seat.seatName][seat.row]) {
+  //       acc[seat.seatName][seat.row] = [];
+  //     }
+  //     acc[seat.seatName][seat.row].push(seat);
+  //     return acc;
+  //   },
+  //   {}
+  // );
+
+  const seatsByType = seats.reduce<
+    Record<string, { color: string; rows: Record<string, EventSeat[]> }>
+  >((acc, seat) => {
+    if (!acc[seat.seatName]) {
+      acc[seat.seatName] = {
+        color: seat.color,
+        rows: {},
+      };
+    }
+
+    if (!acc[seat.seatName].rows[seat.row]) {
+      acc[seat.seatName].rows[seat.row] = [];
+    }
+
+    acc[seat.seatName].rows[seat.row].push(seat);
+    return acc;
+  }, {});
+
+  console.log(seatsByType, " seatsByTypeseatsByTypeseatsByType");
 
   const zoomIn = () => setScale((prev) => Math.min(prev + 0.1, 1.5));
   const zoomOut = () => setScale((prev) => Math.max(prev - 0.1, 0.6));
@@ -144,9 +164,11 @@ export function SeatSelector({
 
       {/* Legend */}
       <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
-        {Object.keys(seatsByType).map((type) => (
+        {Object.entries(seatsByType).map(([type, seatGroup]) => (
           <div key={type} className="flex items-center gap-2">
-            <div className={cn("w-4 h-4 rounded", getSeatColor(type))}></div>
+            <div
+              className={cn("w-4 h-4 rounded", `bg-${seatGroup.color}`)}
+            ></div>
             <span className="capitalize">{type}</span>
           </div>
         ))}
@@ -171,89 +193,88 @@ export function SeatSelector({
         >
           {/* Seat Map */}
           <div className="space-y-8">
-            {Object.entries(seatsByType).map(([seatName, rows], typeIndex) => (
-              <div key={seatName} className="space-y-4">
-                <div className="text-center font-semibold capitalize">{seatName}</div>
-                <div className="flex flex-col gap-2 p-4 bg-card/40 rounded-lg backdrop-blur-sm border border-border/50 shadow-md">
-                  {Object.entries(rows).map(([row, seats]) => (
-                    <div key={row} className="flex items-center gap-2">
-                      <div className="w-6 text-center font-medium text-muted-foreground">
-                        {row}
-                      </div>
-                      <div className="flex gap-2">
-                        {seats
-                          .sort((a, b) => a.seatNo - b.seatNo)
-                          .map((seat) => {
-                            const isSelected = selectedSeats.some(
-                              (s) => s._id === seat._id
-                            );
-                            const isBooked = seat.booked;
+            {Object.entries(seatsByType).map(
+              ([seatName, seatGroup], typeIndex) => (
+                <div key={seatName} className="space-y-4">
+                  <div className="text-center font-semibold capitalize">
+                    {seatName}
+                  </div>
+                  <div className="flex flex-col gap-2 p-4 bg-card/40 rounded-lg backdrop-blur-sm border border-border/50 shadow-md">
+                    {Object.entries(seatGroup.rows).map(([row, seats]) => (
+                      <div key={row} className="flex items-center gap-2">
+                        <div className="w-6 text-center font-medium text-muted-foreground">
+                          {row}
+                        </div>
+                        <div className="flex gap-2">
+                          {seats
+                            .sort((a, b) => a.seatNo - b.seatNo)
+                            .map((seat) => {
+                              const isSelected = selectedSeats.some(
+                                (s) => s._id === seat._id
+                              );
+                              const isBooked = seat.booked;
 
-                            return (
-                              <TooltipProvider key={seat._id}>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <motion.button
-                                      disabled={isBooked}
-                                      onClick={() => onSelectSeat(seat)}
-                                      className={cn(
-                                        "w-8 h-8 rounded-t-lg text-xs transition-all relative select-none",
-                                        isBooked
-                                          ? "bg-muted text-muted-foreground cursor-not-allowed"
-                                          : isSelected
-                                          ? `${getSeatColor(
-                                              seatName
-                                            )} text-white`
-                                          : `${getSeatColor(
-                                              seatName
-                                            )}/20 hover:${getSeatColor(
-                                              seatName
-                                            )}/40`
-                                      )}
-                                      whileHover={!isBooked ? { y: -4 } : {}}
-                                      whileTap={
-                                        !isBooked ? { scale: 0.95 } : {}
-                                      }
-                                      layout
-                                    >
-                                      {seat.seatNo}
-                                      <motion.div
+                              return (
+                                <TooltipProvider key={seat._id}>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <motion.button
+                                        disabled={isBooked}
+                                        onClick={() => onSelectSeat(seat)}
                                         className={cn(
-                                          "absolute bottom-0 left-0 right-0 h-1 rounded-b-lg",
-                                          getSeatColor(seatName)
+                                          "w-8 h-8 rounded-t-lg text-xs transition-all relative select-none",
+                                          isBooked
+                                            ? "bg-muted text-muted-foreground cursor-not-allowed"
+                                            : isSelected
+                                            ? `bg-${seatGroup.color} text-white`
+                                            : `bg-${seatGroup.color}/20 hover:bg-${seatGroup.color}/40`
                                         )}
-                                        layoutId={`seat-base-${seat._id}`}
-                                      />
-                                    </motion.button>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="top">
-                                    <div className="text-xs">
-                                      <div
-                                        className={`font-semibold capitalize text-${getSeatTextColor(
-                                          seatName
-                                        )}`}
+                                        whileHover={!isBooked ? { y: -4 } : {}}
+                                        whileTap={
+                                          !isBooked ? { scale: 0.95 } : {}
+                                        }
+                                        layout
                                       >
-                                        {seat.seatName}
+                                        {seat.seatNo}
+                                        <motion.div
+                                          className={cn(
+                                            "absolute bottom-0 left-0 right-0 h-1 rounded-b-lg",
+                                            `bg-${seatGroup.color}`
+                                          )}
+                                          layoutId={`seat-base-${seat._id}`}
+                                        />
+                                      </motion.button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="top">
+                                      <div className="text-xs">
+                                        <div
+                                          className={cn(
+                                            "font-semibold capitalize",
+                                            `text-${seatGroup.color}`
+                                          )}
+                                        >
+                                          {seat.seatName}
+                                        </div>
+                                        <div>${seat.price || "?"}</div>
+                                        <div>
+                                          {isBooked ? "Booked" : "Available"}
+                                        </div>
                                       </div>
-                                      <div>${seat.price || "?"}</div>
-                                      <div>
-                                        {isBooked ? "Booked" : "Available"}
-                                      </div>
-                                    </div>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            );
-                          })}
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              );
+                            })}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                  {typeIndex < Object.keys(seatsByType).length - 1 && (
+                    <Separator className="my-4" />
+                  )}
                 </div>
-                {typeIndex < Object.keys(seatsByType).length - 1 && (
-                  <Separator className="my-4" />
-                )}
-              </div>
-            ))}
+              )
+            )}
           </div>
         </motion.div>
       </div>
@@ -276,24 +297,29 @@ export function SeatSelector({
               Selected Seats ({selectedSeats.length})
             </h3>
             <div className="flex flex-wrap gap-2">
-              {selectedSeats.map((seat) => (
-                <motion.div
-                  key={seat._id}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  className={cn(
-                    "px-2 py-1 text-xs rounded-md border flex items-center gap-1",
-                    getSeatColor(seat.seatName),
-                    "text-white"
-                  )}
-                >
-                  <span>
-                    {seat.row}-{seat.seatNo} ({seat.seatName})
-                  </span>
-                  <span className="font-medium">${seat.price || "?"}</span>
-                </motion.div>
-              ))}
+              {selectedSeats.map((seat) => {
+                const seatType = seat.seatName;
+                const color = seatsByType?.[seatType]?.color ?? "gray-500"; // fallback if not found
+
+                return (
+                  <motion.div
+                    key={seat._id}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className={cn(
+                      "px-2 py-1 text-xs rounded-md border flex items-center gap-1",
+                      `bg-${color}`,
+                      "text-white"
+                    )}
+                  >
+                    <span>
+                      {seat.row}-{seat.seatNo} ({seatType})
+                    </span>
+                    <span className="font-medium">${seat.price || "?"}</span>
+                  </motion.div>
+                );
+              })}
             </div>
             <div className="mt-4 flex justify-between font-medium">
               <span>Total:</span>

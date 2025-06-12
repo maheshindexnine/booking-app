@@ -35,11 +35,9 @@ export default function CompanyPage() {
 
   const [isClient, setIsClient] = useState(false);
   const [companyName, setCompanyName] = useState("");
-  const [seats, setSeats] = useState([
-    { name: "Standard", capacity: 120 },
-    { name: "Premium", capacity: 40 },
-    { name: "VIP", capacity: 10 },
-  ]);
+  const [seats, setSeats] = useState<
+    { name: string; capacity: number; color: string }[]
+  >([{ name: "", capacity: 0, color: "blue-500" }]);
 
   useEffect(() => {
     setIsClient(true);
@@ -69,7 +67,7 @@ export default function CompanyPage() {
   }
 
   const handleAddSeatType = () => {
-    setSeats([...seats, { name: "", capacity: 0 }]);
+    setSeats([...seats, { name: "", capacity: 0, color: "blue-500" }]);
   };
 
   const handleRemoveSeatType = (index: number) => {
@@ -78,13 +76,18 @@ export default function CompanyPage() {
 
   const handleSeatChange = (
     index: number,
-    field: "name" | "capacity",
+    field: "name" | "capacity" | "color",
     value: string
   ) => {
     const newSeats = [...seats];
     newSeats[index] = {
       ...newSeats[index],
-      [field]: field === "capacity" ? parseInt(value) || 0 : value,
+      [field]:
+        field === "capacity"
+          ? parseInt(value) || 0
+          : field === "color"
+          ? value
+          : value,
     };
     setSeats(newSeats);
   };
@@ -214,6 +217,36 @@ export default function CompanyPage() {
                           }
                           placeholder="e.g., Standard, VIP"
                         />
+                      </div>
+                      <div className="flex-1">
+                        <Label htmlFor={`seat-color-${index}`}>Color</Label>
+                        <select
+                          id={`seat-color-${index}`}
+                          value={seat.color}
+                          onChange={(e) =>
+                            handleSeatChange(index, "color", e.target.value)
+                          }
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <option value="blue-500" className="bg-blue-500">
+                            Standard (Blue)
+                          </option>
+                          <option value="purple-500" className="bg-purple-500">
+                            Premium (Purple)
+                          </option>
+                          <option value="yellow-500" className="bg-yellow-500">
+                            VIP (Yellow)
+                          </option>
+                          <option value="pink-500" className="bg-pink-500">
+                            Deluxe (Pink)
+                          </option>
+                          <option value="green-500" className="bg-green-500">
+                            Executive (Green)
+                          </option>
+                          <option value="red-500" className="bg-red-500">
+                            Royal (Red)
+                          </option>
+                        </select>
                       </div>
                       <div className="flex-1">
                         <Label htmlFor={`seat-capacity-${index}`}>
