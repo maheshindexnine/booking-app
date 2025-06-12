@@ -2,7 +2,7 @@ import { Booking, Seat } from "@/types";
 import api from "./api";
 
 export interface BookSeatPayload {
-  id: string;
+  ids: string[];
   booked: boolean;
 }
 

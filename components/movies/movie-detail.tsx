@@ -40,6 +40,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { getSchedules, schedules } = useEventScheduleStore();
+  const { clearSelectedSeats } = useMovieStore();
   const { getSeats, seats } = useSeatStore();
   const { getMovieById, selectedMovie, selectedSeats, toggleSeatSelection } =
     useMovieStore();
@@ -131,7 +132,14 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
     }
 
     try {
-      await bookSeat({ id: selectedSeats[0]._id, booked: true });
+      const payload = {
+        ids: selectedSeats.map(seat => seat._id),
+        booked: true,
+      }
+
+      await bookSeat(payload);
+
+      clearSelectedSeats();
 
       toast({
         title: "Booking Successful!",
@@ -291,7 +299,7 @@ export function MovieDetail({ movieId }: MovieDetailProps) {
                         {selectedSeats
                           .reduce(
                             (sum, seat) =>
-                              sum + (seatPrices[seat.seatName] || 0),
+                              sum + (seat.price || 0),
                             0
                           )
                           .toFixed(2)}
