@@ -17,6 +17,8 @@ export interface User {
   phone: string;
   type: UserRole;
   createdAt: string;
+  password?: string;
+  role?: UserRole;
 }
 
 export interface Movie {
@@ -103,6 +105,8 @@ export interface EventSeat {
   seatNo: number;
   booked: boolean;
   price: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Booking {

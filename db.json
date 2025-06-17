@@ -1,0 +1,931 @@
+{
+  "users": [
+    {
+      "_id": "684136df902f913e10d76358",
+      "name": "Dummy User",
+      "email": "dummy@user.com",
+      "password": "123123",
+      "type": "user",
+      "createdAt": "2024-03-19T10:00:00.000Z",
+      "updatedAt": "2024-03-19T10:00:00.000Z"
+    },
+    {
+      "_id": "684136e5902f913e10d7635a",
+      "name": "Dummy Admin",
+      "email": "dummy@admin.com",
+      "password": "123123",
+      "type": "admin",
+      "createdAt": "2024-03-19T10:00:00.000Z",
+      "updatedAt": "2024-03-19T10:00:00.000Z"
+    },
+    {
+      "_id": "684136e5902f913e10d7635e",
+      "name": "Dummy Vendor",
+      "email": "dummy@vendor.com",
+      "password": "123123",
+      "type": "vendor",
+      "createdAt": "2024-03-19T10:00:00.000Z",
+      "updatedAt": "2024-03-19T10:00:00.000Z"
+    }
+  ],
+  "companies": [
+    {
+      "_id": "684a893166c4dc0a8043686b",
+      "userId": "684136e5902f913e10d7635e",
+      "name": "PVR Baner",
+      "seats": [
+        {
+          "name": "gold",
+          "capacity": 10,
+          "color": "purple-500",
+          "_id": "684a893166c4dc0a8043686c"
+        },
+        {
+          "name": "sliver",
+          "capacity": 5,
+          "color": "pink-500",
+          "_id": "684a893166c4dc0a8043686d"
+        }
+      ]
+    },
+    {
+      "_id": "684a893166c4dc0a8043686c",
+      "userId": "684136e5902f913e10d7635e",
+      "name": "PVR Kothrud",
+      "seats": [
+        {
+          "name": "gold",
+          "capacity": 10,
+          "color": "red-500",
+          "_id": "684a893166c4dc0a8043686e"
+        },
+        {
+          "name": "sliver",
+          "capacity": 5,
+          "color": "pink-500",
+          "_id": "684a893166c4dc0a8043686f"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "_id": "684143388c25e2c2fff7ada0",
+      "name": "Tiger",
+      "type": "movie",
+      "description": "This is south movie",
+      "genre": ["Romantic"],
+      "rating": 4.1,
+      "duration": 3400,
+      "image": "https://images.pexels.com/photos/1117132/pexels-photo-1117132.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "userId": "684136e5902f913e10d7635a",
+      "createdAt": "2025-06-05T07:11:52.804Z",
+      "updatedAt": "2025-06-05T07:11:52.804Z",
+      "__v": 0
+    },
+    {
+      "_id": "684143748c25e2c2fff7ada2",
+      "name": "Veer Zara",
+      "type": "movie",
+      "description": "This is south movie",
+      "genre": ["Action"],
+      "rating": 4.1,
+      "duration": 1450,
+      "image": "https://images.pexels.com/photos/1117132/pexels-photo-1117132.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "userId": "684136e5902f913e10d7635a",
+      "createdAt": "2025-06-05T07:12:52.714Z",
+      "updatedAt": "2025-06-05T07:12:52.714Z",
+      "__v": 0
+    },
+    {
+      "_id": "6841511c41266b31e785ded8",
+      "name": "Veer 2",
+      "type": "movie",
+      "description": "this is salman khan movie",
+      "genre": ["Action"],
+      "rating": 4.5,
+      "duration": 30000,
+      "image": "https://fastly.picsum.photos/id/789/200/200.jpg?hmac=7x3gF1b3I8Yu8nItiG1H2GYq6GcipkMPET8y2sqov5s",
+      "userId": "684136e5902f913e10d7635a",
+      "createdAt": "2025-06-05T08:11:08.371Z",
+      "updatedAt": "2025-06-05T08:11:08.371Z",
+      "__v": 0
+    },
+    {
+      "_id": "684152d441266b31e785deea",
+      "name": "Ishq 2",
+      "type": "movie",
+      "description": "this is romantic movie",
+      "genre": ["romantic"],
+      "rating": 4.5,
+      "duration": 3600,
+      "image": "https://fastly.picsum.photos/id/789/200/200.jpg?hmac=7x3gF1b3I8Yu8nItiG1H2GYq6GcipkMPET8y2sqov5s",
+      "userId": "684136e5902f913e10d7635a",
+      "createdAt": "2025-06-05T08:18:28.624Z",
+      "updatedAt": "2025-06-05T08:18:28.624Z",
+      "__v": 0
+    },
+    {
+      "_id": "6847ff72a6105e58713587dc",
+      "name": "Housefull 5",
+      "type": "movie",
+      "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+      "genre": ["Drama", "Action"],
+      "rating": 4.3,
+      "duration": 1200,
+      "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+      "userId": "684136e5902f913e10d7635a",
+      "createdAt": "2025-06-10T09:48:34.875Z",
+      "updatedAt": "2025-06-10T09:48:34.875Z",
+      "__v": 0
+    }
+  ],
+  "eventSchedules": [
+    {
+      "_id": "684a894866c4dc0a80436887",
+      "userId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg"
+      },
+      "date": "2025-06-13T00:00:00.000Z",
+      "seatTypes": [
+        {
+          "name": "gold",
+          "price": 5,
+          "capacity": 10,
+          "color": "purple-500",
+          "_id": "684a894866c4dc0a80436888"
+        },
+        {
+          "name": "sliver",
+          "price": 2,
+          "capacity": 5,
+          "color": "pink-500",
+          "_id": "684a894866c4dc0a80436889"
+        }
+      ],
+      "createdAt": "2025-06-12T08:01:12.234Z",
+      "updatedAt": "2025-06-12T08:01:12.234Z",
+      "__v": 0
+    }
+  ],
+  "eventSeats": [
+    {
+      "_id": "684a894866c4dc0a804368dc",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "1",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.425Z",
+      "updatedAt": "2025-06-12T08:01:12.425Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368e0",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": {
+        "_id": "684a894866c4dc0a80436887",
+        "userId": "684136df902f913e10d76358",
+        "companyId": "684a893166c4dc0a8043686b",
+        "eventId": "6847ff72a6105e58713587dc",
+        "date": "2025-06-13T00:00:00.000Z",
+        "seatTypes": [
+          {
+            "name": "gold",
+            "price": 5,
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a894866c4dc0a80436888"
+          },
+          {
+            "name": "sliver",
+            "price": 2,
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a894866c4dc0a80436889"
+          }
+        ],
+        "createdAt": "2025-06-12T08:01:12.234Z",
+        "updatedAt": "2025-06-12T08:01:12.234Z",
+        "__v": 0
+      },
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "2",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.429Z",
+      "updatedAt": "2025-06-12T08:01:12.429Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368ea",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "7",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.479Z",
+      "updatedAt": "2025-06-12T08:01:12.479Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368e6",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "6",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.477Z",
+      "updatedAt": "2025-06-12T08:01:12.477Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368ee",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "9",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.481Z",
+      "updatedAt": "2025-06-12T08:01:12.481Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368f2",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "8",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.485Z",
+      "updatedAt": "2025-06-12T08:01:12.485Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368f6",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "10",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.487Z",
+      "updatedAt": "2025-06-12T08:01:12.487Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368fa",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "1",
+      "row": "A",
+      "seatName": "sliver",
+      "color": "pink-500",
+      "price": 2,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.489Z",
+      "updatedAt": "2025-06-12T08:01:12.489Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a804368fe",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "2",
+      "row": "A",
+      "seatName": "sliver",
+      "color": "pink-500",
+      "price": 2,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.491Z",
+      "updatedAt": "2025-06-12T08:01:12.491Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a80436902",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "3",
+      "row": "A",
+      "seatName": "sliver",
+      "color": "pink-500",
+      "price": 2,
+      "booked": true,
+      "createdAt": "2025-06-12T08:01:12.494Z",
+      "updatedAt": "2025-06-12T08:19:45.758Z",
+      "__v": 0,
+      "userId": "684136ec902f913e10d7635c"
+    },
+    {
+      "_id": "684a894866c4dc0a80436906",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "5",
+      "row": "A",
+      "seatName": "sliver",
+      "color": "pink-500",
+      "price": 2,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.497Z",
+      "updatedAt": "2025-06-12T08:01:12.497Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a8043690a",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "4",
+      "row": "A",
+      "seatName": "sliver",
+      "color": "pink-500",
+      "price": 2,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.499Z",
+      "updatedAt": "2025-06-12T08:01:12.499Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a80436918",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "4",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": true,
+      "createdAt": "2025-06-12T08:01:12.580Z",
+      "updatedAt": "2025-06-12T08:19:45.758Z",
+      "__v": 0,
+      "userId": "684136ec902f913e10d7635c"
+    },
+    {
+      "_id": "684a894866c4dc0a80436920",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "3",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.596Z",
+      "updatedAt": "2025-06-12T08:01:12.596Z",
+      "__v": 0
+    },
+    {
+      "_id": "684a894866c4dc0a80436924",
+      "vendorId": "684136df902f913e10d76358",
+      "companyId": {
+        "_id": "684a893166c4dc0a8043686b",
+        "userId": "684136e5902f913e10d7635e",
+        "name": "PVR Baner",
+        "seats": [
+          {
+            "name": "gold",
+            "capacity": 10,
+            "color": "purple-500",
+            "_id": "684a893166c4dc0a8043686c"
+          },
+          {
+            "name": "sliver",
+            "capacity": 5,
+            "color": "pink-500",
+            "_id": "684a893166c4dc0a8043686d"
+          }
+        ]
+      },
+      "eventScheduleId": "684a894866c4dc0a80436887",
+      "eventId": {
+        "_id": "6847ff72a6105e58713587dc",
+        "name": "Housefull 5",
+        "type": "movie",
+        "description": "Housefull 5 is a 2025 Indian Hindi-language comedy thriller film co-written and directed by Tarun Mansukhani",
+        "genre": ["Drama", "Action"],
+        "rating": 4.3,
+        "duration": 1200,
+        "image": "https://stat5.bollywoodhungama.in/wp-content/uploads/2022/10/Housefull-5-9-306x393.jpg",
+        "userId": "684136e5902f913e10d7635a",
+        "createdAt": "2025-06-10T09:48:34.875Z",
+        "updatedAt": "2025-06-10T09:48:34.875Z",
+        "__v": 0
+      },
+      "seatNo": "5",
+      "row": "A",
+      "seatName": "gold",
+      "color": "purple-500",
+      "price": 5,
+      "booked": false,
+      "createdAt": "2025-06-12T08:01:12.710Z",
+      "updatedAt": "2025-06-12T08:01:12.710Z",
+      "__v": 0
+    }
+  ]
+}
