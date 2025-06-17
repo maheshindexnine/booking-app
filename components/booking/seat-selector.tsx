@@ -55,7 +55,7 @@ export function SeatSelector({
   >((acc, seat) => {
     if (!acc[seat.seatName]) {
       acc[seat.seatName] = {
-        color: seat.color,
+        color: seat.color || "neutral-500",
         rows: {},
       };
     }

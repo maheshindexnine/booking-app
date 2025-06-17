@@ -37,7 +37,6 @@ export const userDB = {
       ...userData,
       _id: String(db.users.length + 1),
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
     db.users.push(newUser);
     writeDB(db);
@@ -140,7 +139,6 @@ export const eventDB = {
       ...userData,
       _id: String(db.events.length + 1),
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
     db.events.push(newEvent);
     writeDB(db);

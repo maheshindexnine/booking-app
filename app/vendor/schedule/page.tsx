@@ -123,6 +123,7 @@ export default function SchedulePage() {
         companyId: selectedCompany,
         eventId: selectedMovie,
         date,
+        // @ts-ignore
         seatTypes,
       });
 

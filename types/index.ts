@@ -12,6 +12,7 @@ export interface Auth {
 
 export interface User {
   id: string;
+  _id?: string;
   name: string;
   email: string;
   phone: string;
@@ -103,6 +104,7 @@ export interface EventSeat {
   seatName: string;
   row: string;
   seatNo: number;
+  color?: string;
   booked: boolean;
   price: number;
   createdAt?: string;
