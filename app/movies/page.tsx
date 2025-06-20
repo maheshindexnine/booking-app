@@ -42,7 +42,7 @@ export default function MoviesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {moviesData.map((movie, index) => (
             // <MovieCard key={movie._id} movie={movie} featured={index === 0} />
-            <MovieCardNew key={movie._id} movie={movie} />
+            <MovieCard key={movie._id} movie={movie} />
           ))}
         </div>
 
